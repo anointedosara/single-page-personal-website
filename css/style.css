@@ -196,13 +196,17 @@ a:hover {
   color: #fff;
 }
 
+/* The circle stays dark in BOTH themes. It floats over the hero
+   photo and over whatever section you have scrolled to, so it
+   cannot follow the page colours or it disappears on the light
+   theme. Same reason for the buttons further down. */
 .brand-mark {
   display: block;
   width: 38px;
   height: 38px;
   border-radius: 50%;
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(20, 20, 24, 0.78);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   color: #fff;
   font-size: 13px;
   line-height: 36px;
@@ -215,9 +219,9 @@ a:hover {
   display: flex;
   gap: 2px;
   padding: 5px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 999px;
-  background: rgba(20, 20, 24, 0.55);
+  background: rgba(20, 20, 24, 0.78);
 }
 
 .nav-link {
@@ -254,15 +258,19 @@ a:hover {
   white-space: nowrap;
 }
 
-/* See-through, for use on top of the hero photo */
+/* Dark pill, for use on top of the hero photo and on top of the
+   page itself. Kept dark in both themes. */
 .pill-ghost {
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  background: rgba(20, 20, 24, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgba(20, 20, 24, 0.78);
   color: #fff;
 }
 
+/* The hover is a LIGHTER dark rather than see-through white,
+   because see-through white over the light theme would leave
+   white text on a white button. */
 .pill-ghost:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(52, 56, 64, 0.92);
   color: #fff;
 }
 
@@ -291,15 +299,16 @@ a:hover {
 
 /* The theme button and the hamburger button. They float over
    the hero photo, so they are styled like the pills rather
-   than using the page colours. */
+   than using the page colours, and they stay dark on both
+   themes for the same reason as the AO circle. */
 .icon-btn,
 .menu-btn {
   width: 38px;
   height: 38px;
   padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 50%;
-  background: rgba(20, 20, 24, 0.55);
+  background: rgba(20, 20, 24, 0.78);
   color: #fff;
   font-size: 15px;
   line-height: 1;
@@ -308,12 +317,55 @@ a:hover {
 
 .icon-btn:hover,
 .menu-btn:hover {
-  background: rgba(255, 255, 255, 0.16);
+  background: rgba(52, 56, 64, 0.92);
 }
 
 /* The hamburger is hidden on big screens. Section 11 shows it. */
 .menu-btn {
   display: none;
+}
+
+/* The button holds two icons stacked on top of each other:
+   the three bars and the cross. Both are centred, and only
+   one is visible at a time. */
+.menu-btn {
+  position: relative;
+}
+
+.menu-bars,
+.menu-cross {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+/* Closed: the bars show, the cross is turned and faded out. */
+.menu-bars {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+.menu-cross {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(-90deg);
+}
+
+/* Open: the two swap over. JavaScript adds "is-open". */
+.menu-btn.is-open .menu-bars {
+  opacity: 0;
+  transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.menu-btn.is-open .menu-cross {
+  opacity: 1;
+  transform: translate(-50%, -50%) rotate(0deg);
+}
+
+/* The cross glyph is a little smaller than the bars, so nudge
+   it up to match. */
+.menu-cross {
+  font-size: 17px;
 }
 
 /* The dark sheet behind the open mobile menu.

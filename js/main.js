@@ -87,14 +87,19 @@ function openMenu() {
   nav.classList.add("open");
   navScrim.classList.add("open");
   document.body.classList.add("no-scroll");
+  // "is-open" swaps the three bars for a cross
+  menuButton.classList.add("is-open");
   menuButton.setAttribute("aria-expanded", "true");
+  menuButton.setAttribute("aria-label", "Close menu");
 }
 
 function closeMenu() {
   nav.classList.remove("open");
   navScrim.classList.remove("open");
   document.body.classList.remove("no-scroll");
+  menuButton.classList.remove("is-open");
   menuButton.setAttribute("aria-expanded", "false");
+  menuButton.setAttribute("aria-label", "Open menu");
 }
 
 menuButton.addEventListener("click", function () {
