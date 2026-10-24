@@ -130,11 +130,29 @@ var progressBar = document.getElementById("progress");
 var topButton = document.getElementById("topButton");
 var sections = document.querySelectorAll("main section");
 
+/* Asking the browser for a position (offsetTop, scrollHeight)
+   forces it to re-calculate the whole layout. Doing that on
+   every scroll event is what makes scrolling stutter, so we
+   measure once up front and keep the numbers here. */
+var sectionTops = [];
+var pageHeight = 0;
+
+function measurePage() {
+  pageHeight = document.body.scrollHeight - window.innerHeight;
+
+  sectionTops = [];
+  sections.forEach(function (section) {
+    sectionTops.push({
+      id: section.id,
+      top: section.getBoundingClientRect().top + window.scrollY
+    });
+  });
+}
+
 function handleScroll() {
   var scrolled = window.scrollY;
 
   // How far down the page we are, from 0 to 100
-  var pageHeight = document.body.scrollHeight - window.innerHeight;
   var percent = 0;
   if (pageHeight > 0) {
     percent = (scrolled / pageHeight) * 100;
@@ -157,8 +175,8 @@ function handleScroll() {
 
   // Find the last section whose top has passed the header
   var currentId = "";
-  sections.forEach(function (section) {
-    if (scrolled >= section.offsetTop - 150) {
+  sectionTops.forEach(function (section) {
+    if (scrolled >= section.top - 150) {
       currentId = section.id;
     }
   });
@@ -173,7 +191,29 @@ function handleScroll() {
   });
 }
 
-window.addEventListener("scroll", handleScroll);
+/* The browser can fire scroll events faster than it can draw.
+   This waits for the next frame and skips the extra events, so
+   the work happens once per frame instead of dozens of times. */
+var scrollQueued = false;
+
+window.addEventListener("scroll", function () {
+  if (scrollQueued === true) {
+    return;
+  }
+  scrollQueued = true;
+
+  requestAnimationFrame(function () {
+    handleScroll();
+    scrollQueued = false;
+  });
+});
+
+window.addEventListener("resize", function () {
+  measurePage();
+  handleScroll();
+});
+
+measurePage();
 handleScroll();   // run once at the start
 
 topButton.addEventListener("click", function () {
@@ -490,6 +530,11 @@ var animationsOn = gsapLoaded && prefersStill === false;
 
 if (gsapLoaded === true) {
   gsap.registerPlugin(ScrollTrigger);
+
+  /* On a phone, scrolling hides the address bar, which changes
+     the window height. Without this, ScrollTrigger re-measures
+     everything mid-scroll and the page jumps. */
+  ScrollTrigger.config({ ignoreMobileResize: true });
 }
 
 /* Splits a piece of text into one <span> per letter, so each
@@ -564,14 +609,17 @@ function runWelcome(whenFinished) {
     }
   }, "<");
 
-  // Slide the panel up and out, then start the hero
+  /* Slide the panel up and out. whenFinished runs on START, not
+     on complete, so the hero is already animating as the panel
+     lifts. Running it after would show the finished page for a
+     moment and then reset it. */
   intro.to(preloader, {
     yPercent: -100,
-    duration: 0.8,
+    duration: 0.9,
     ease: "power3.inOut",
+    onStart: whenFinished,
     onComplete: function () {
       preloader.remove();
-      whenFinished();
     }
   }, "+=0.2");
 }
@@ -585,14 +633,18 @@ function runWelcome(whenFinished) {
 
 function runHero() {
   if (animationsOn === false) {
-    return;
+    return null;
   }
 
   // Split the big name so the letters can rise one by one
   var nameLines = document.querySelectorAll(".hero-name .line");
   nameLines.forEach(splitIntoLetters);
 
-  var hero = gsap.timeline();
+  /* paused: true builds the timeline without playing it. The
+     starting positions are applied straight away, so the hero
+     is never seen in its finished state behind the welcome
+     screen. We press play as the screen lifts. */
+  var hero = gsap.timeline({ paused: true });
 
   // The background photo settles back from a slow zoom
   hero.from(".hero-bg img", {
@@ -622,13 +674,18 @@ function runHero() {
     stagger: 0.1
   }, "-=0.4");
 
-  // The header floats in last
-  hero.from(".header-inner > *", {
+  /* The header floats in last.
+     Note we animate the nav's inner list, not .nav itself: on a
+     phone .nav is the sliding menu panel, and leaving a left-over
+     transform on it stops that panel sliding in. */
+  hero.from([".brand", ".nav-list", ".header-tools"], {
     opacity: 0,
     y: -14,
     duration: 0.5,
     stagger: 0.08
   }, "-=0.5");
+
+  return hero;
 }
 
 
@@ -647,7 +704,7 @@ function runCounters() {
     }
 
     gsap.to({ value: 0 }, {
-      scrollTrigger: { trigger: "#stats", start: "top 85%" },
+      scrollTrigger: { trigger: "#stats", start: "top 85%", once: true },
       value: target,
       duration: 1.4,
       ease: "power2.out",
@@ -740,7 +797,7 @@ function runScrollAnimations() {
   // ---- Section headings: tag, title and subtitle in turn ----
   document.querySelectorAll(".section-head").forEach(function (head) {
     gsap.from(head.children, {
-      scrollTrigger: { trigger: head, start: "top 85%" },
+      scrollTrigger: { trigger: head, start: "top 85%", once: true },
       opacity: 0,
       y: 30,
       duration: 0.7,
@@ -751,7 +808,7 @@ function runScrollAnimations() {
 
   // ---- About: paragraphs rise, fact rows come in after ----
   gsap.from(".about-text p", {
-    scrollTrigger: { trigger: ".about-text", start: "top 85%" },
+    scrollTrigger: { trigger: ".about-text", start: "top 85%", once: true },
     opacity: 0,
     y: 24,
     duration: 0.6,
@@ -759,7 +816,7 @@ function runScrollAnimations() {
   });
 
   gsap.from(".facts li", {
-    scrollTrigger: { trigger: ".facts", start: "top 85%" },
+    scrollTrigger: { trigger: ".facts", start: "top 85%", once: true },
     opacity: 0,
     x: 30,
     duration: 0.5,
@@ -768,7 +825,7 @@ function runScrollAnimations() {
 
   // ---- Skill cards ----
   gsap.from(".skill-card", {
-    scrollTrigger: { trigger: ".skills-grid", start: "top 85%" },
+    scrollTrigger: { trigger: ".skills-grid", start: "top 85%", once: true },
     opacity: 0,
     y: 40,
     duration: 0.6,
@@ -793,7 +850,7 @@ function runScrollAnimations() {
   // Each job slides in from the left, with its dot popping
   document.querySelectorAll(".job").forEach(function (job) {
     gsap.from(job, {
-      scrollTrigger: { trigger: job, start: "top 85%" },
+      scrollTrigger: { trigger: job, start: "top 85%", once: true },
       opacity: 0,
       x: -30,
       duration: 0.6,
@@ -801,7 +858,7 @@ function runScrollAnimations() {
     });
 
     gsap.from(job.querySelector(".job-dot"), {
-      scrollTrigger: { trigger: job, start: "top 85%" },
+      scrollTrigger: { trigger: job, start: "top 85%", once: true },
       scale: 0,
       duration: 0.5,
       delay: 0.2,
@@ -811,7 +868,7 @@ function runScrollAnimations() {
 
   // ---- Filter buttons ----
   gsap.from(".chip", {
-    scrollTrigger: { trigger: ".filters", start: "top 90%" },
+    scrollTrigger: { trigger: ".filters", start: "top 90%", once: true },
     opacity: 0,
     y: 16,
     duration: 0.4,
@@ -823,7 +880,7 @@ function runScrollAnimations() {
 
   // ---- Contact ----
   gsap.from(".contact-list li", {
-    scrollTrigger: { trigger: ".contact-list", start: "top 85%" },
+    scrollTrigger: { trigger: ".contact-list", start: "top 85%", once: true },
     opacity: 0,
     x: -24,
     duration: 0.5,
@@ -831,7 +888,7 @@ function runScrollAnimations() {
   });
 
   gsap.from(".form .field, .form .btn", {
-    scrollTrigger: { trigger: ".form", start: "top 85%" },
+    scrollTrigger: { trigger: ".form", start: "top 85%", once: true },
     opacity: 0,
     y: 24,
     duration: 0.5,
@@ -930,30 +987,6 @@ function runHorizontalSections() {
    scroll animations are set up.
    ========================================================= */
 
-var pageStarted = false;
-
-function startPage() {
-  // Make sure this can only ever happen once
-  if (pageStarted === true) {
-    return;
-  }
-  pageStarted = true;
-
-  runHero();
-  runScrollAnimations();
-  runCounters();
-  runHorizontalSections();
-  startTyping();
-
-  /* Images change the height of the page as they load, which
-     moves every scroll trigger. Measure again once they are in. */
-  window.addEventListener("load", function () {
-    if (typeof ScrollTrigger !== "undefined") {
-      ScrollTrigger.refresh();
-    }
-  });
-}
-
 if (animationsOn === false) {
   // No GSAP, or the visitor prefers no motion: show the page
   // as it is and still run the typing effect.
@@ -961,7 +994,40 @@ if (animationsOn === false) {
     preloader.remove();
   }
   startTyping();
+
 } else {
+
+  /* A browser normally puts you back where you were when you
+     refresh. With a welcome screen and pinned sections that
+     lands you mid-animation, so we always start at the top. */
+  if ("scrollRestoration" in history) {
+    history.scrollRestoration = "manual";
+  }
+  window.scrollTo(0, 0);
+
+  /* Build every animation NOW. Creating them applies their
+     starting positions immediately, so nothing is ever seen in
+     its finished state behind the welcome screen. */
+  var heroTimeline = runHero();
+  runScrollAnimations();
+  runCounters();
+  runHorizontalSections();
+
+  var pageStarted = false;
+
+  function startPage() {
+    // Make sure this can only ever happen once
+    if (pageStarted === true) {
+      return;
+    }
+    pageStarted = true;
+
+    if (heroTimeline) {
+      heroTimeline.play();
+    }
+    startTyping();
+  }
+
   runWelcome(startPage);
 
   /* Safety net. The welcome screen covers the whole page, so
@@ -975,6 +1041,16 @@ if (animationsOn === false) {
       startPage();
     }
   }, 8000);
+
+  /* Images change the height of the page as they load, which
+     moves every scroll trigger. Measure again once they are in. */
+  window.addEventListener("load", function () {
+    ScrollTrigger.refresh();
+    measurePage();
+  });
+
+  // Keep the cached positions in step with ScrollTrigger
+  ScrollTrigger.addEventListener("refresh", measurePage);
 }
 
 

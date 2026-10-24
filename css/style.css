@@ -67,6 +67,10 @@ html {
   scroll-behavior: smooth;
   /* Stops headings hiding under the sticky header */
   scroll-padding-top: 90px;
+  /* Hides sideways overflow. "clip" rather than "hidden" because
+     "hidden" turns the page into a scroll container, which makes
+     the pinned sideways sections stutter. */
+  overflow-x: clip;
 }
 
 body {
@@ -76,7 +80,6 @@ body {
   font-family: var(--font-text);
   font-size: 16px;
   line-height: 1.65;
-  overflow-x: hidden;
 }
 
 /* JavaScript adds this while the menu or photo viewer is open,
@@ -215,8 +218,6 @@ a:hover {
   border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 999px;
   background: rgba(20, 20, 24, 0.55);
-  /* Blurs whatever is behind the pill */
-  backdrop-filter: blur(12px);
 }
 
 .nav-link {
@@ -257,7 +258,6 @@ a:hover {
 .pill-ghost {
   border: 1px solid rgba(255, 255, 255, 0.18);
   background: rgba(20, 20, 24, 0.55);
-  backdrop-filter: blur(12px);
   color: #fff;
 }
 
@@ -300,7 +300,6 @@ a:hover {
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 50%;
   background: rgba(20, 20, 24, 0.55);
-  backdrop-filter: blur(12px);
   color: #fff;
   font-size: 15px;
   line-height: 1;
@@ -317,13 +316,15 @@ a:hover {
   display: none;
 }
 
-/* The dark sheet behind the open mobile menu */
+/* The dark sheet behind the open mobile menu.
+   Its z-index must stay BELOW the header, because the menu
+   itself sits inside the header. */
 .nav-scrim {
   display: none;
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 114;
+  z-index: 105;
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
@@ -345,6 +346,7 @@ a:hover {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
+  min-height: 100svh;   /* stable on phones; vh above is the fallback */
   padding: 120px var(--gutter);
   overflow: hidden;
   background: #0a0a0c;
@@ -830,6 +832,7 @@ a:hover {
   justify-content: center;
   gap: 26px;
   height: 100vh;
+  height: 100svh;       /* stable on phones; vh above is the fallback */
   padding: 90px 0 40px;
   overflow: hidden;   /* hides the part of the row that is off-screen */
 }
@@ -1317,9 +1320,10 @@ a:hover {
   display: inline-block;
 }
 
-/* Tells the browser these will move, so it prepares for it */
-.hero-bg img,
-.letter {
+/* Tells the browser the background will move, so it prepares.
+   We do not do this for the letters: there are 18 of them and
+   they only move once, so it costs more than it saves. */
+.hero-bg img {
   will-change: transform;
 }
 
@@ -1391,20 +1395,35 @@ a:hover {
     visibility: visible;
   }
 
+  /* Inside the sliding panel the links are a plain stacked
+     list, so drop the pill shape they have on a wide screen. */
   .nav-list {
     flex-direction: column;
     gap: 4px;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: none;
   }
 
+  /* The panel uses the page colours, not the hero photo, so
+     the links have to use the page text colour too. */
   .nav-link {
     padding: 12px 14px;
+    border-radius: 8px;
+    color: var(--muted);
     font-size: 16px;
+  }
+
+  .nav-link:hover {
+    background: var(--panel-2);
+    color: var(--text);
   }
 
   .nav-link.active {
     background: var(--panel-2);
-    border-bottom: none;
     border-left: 3px solid var(--accent);
+    color: var(--text);
   }
 
 
