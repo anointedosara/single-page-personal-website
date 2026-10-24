@@ -165,17 +165,14 @@ a:hover {
    3. HEADER AND MENU
    ========================================================= */
 
+/* The header floats over the hero rather than sitting above
+   it, so the background photo runs to the top of the screen. */
 .site-header {
-  position: sticky;      /* stays at the top as you scroll */
+  position: fixed;
   top: 0;
+  left: 0;
   z-index: 110;
-  background: var(--bg);
-  border-bottom: 1px solid transparent;
-}
-
-/* JavaScript adds this once you have scrolled down a little */
-.site-header.scrolled {
-  border-bottom-color: var(--line);
+  width: 100%;
 }
 
 .header-inner {
@@ -183,57 +180,106 @@ a:hover {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  min-height: 68px;
+  padding: 16px var(--gutter);
 }
 
 .brand {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--text);
+  color: #fff;
   font-family: var(--font-title);
   font-weight: 700;
 }
 
 .brand:hover {
-  color: var(--text);
+  color: #fff;
 }
 
 .brand-mark {
-  width: 34px;
-  height: 34px;
-  border-radius: 10px;
-  background: var(--accent);
-  color: var(--on-accent);
+  display: block;
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #fff;
   font-size: 13px;
-  line-height: 34px;
+  line-height: 36px;
   text-align: center;
 }
 
+/* ----- The pill of links in the middle ----- */
+
 .nav-list {
   display: flex;
-  gap: 4px;
+  gap: 2px;
+  padding: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 999px;
+  background: rgba(20, 20, 24, 0.55);
+  /* Blurs whatever is behind the pill */
+  backdrop-filter: blur(12px);
 }
 
 .nav-link {
   display: block;
-  padding: 8px 12px;
-  border-radius: 8px;
-  color: var(--muted);
-  font-size: 15px;
+  padding: 7px 15px;
+  border-radius: 999px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 14px;
   font-weight: 500;
 }
 
 .nav-link:hover {
-  background: var(--panel);
-  color: var(--text);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
 }
 
 /* JavaScript adds this to the link for the section you are reading */
 .nav-link.active {
-  color: var(--text);
-  border-bottom: 2px solid var(--accent);
-  border-radius: 8px 8px 0 0;
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+/* ----- Pill buttons ----- */
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: 999px;
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* See-through, for use on top of the hero photo */
+.pill-ghost {
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(20, 20, 24, 0.55);
+  backdrop-filter: blur(12px);
+  color: #fff;
+}
+
+.pill-ghost:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+/* Solid white, for the two corners of the hero */
+.pill-solid {
+  background: #fff;
+  color: #14171d;
+}
+
+.pill-solid:hover {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.pill-arrow {
+  font-size: 15px;
+  line-height: 1;
 }
 
 .header-tools {
@@ -243,24 +289,27 @@ a:hover {
   z-index: 116;
 }
 
-/* The theme button and the hamburger button */
+/* The theme button and the hamburger button. They float over
+   the hero photo, so they are styled like the pills rather
+   than using the page colours. */
 .icon-btn,
 .menu-btn {
   width: 38px;
   height: 38px;
   padding: 0;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: none;
-  color: var(--text);
-  font-size: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 50%;
+  background: rgba(20, 20, 24, 0.55);
+  backdrop-filter: blur(12px);
+  color: #fff;
+  font-size: 15px;
   line-height: 1;
   cursor: pointer;
 }
 
 .icon-btn:hover,
 .menu-btn:hover {
-  border-color: var(--accent);
+  background: rgba(255, 255, 255, 0.16);
 }
 
 /* The hamburger is hidden on big screens. Section 11 shows it. */
@@ -289,64 +338,105 @@ a:hover {
    4. HERO (the big first screen)
    ========================================================= */
 
+/* A full screen panel with the photo behind the text */
 .hero {
   position: relative;
-  padding-top: 100px;
-  overflow: hidden;
-}
-
-/* The soft orange glow in the top corner */
-.hero-glow {
-  position: absolute;
-  top: -220px;
-  right: -140px;
-  width: 620px;
-  height: 620px;
-  border-radius: 50%;
-  background: var(--accent-soft);
-  filter: blur(90px);    /* turns the circle into a soft cloud */
-}
-
-.hero-grid {
-  position: relative;
-  display: grid;
-  grid-template-columns: 1.3fr 0.8fr;   /* text wider than photo */
-  gap: 60px;
-  align-items: center;
-  padding-bottom: 76px;
-}
-
-.eyebrow {
-  margin: 0 0 10px;
-  color: var(--accent);
-  font-family: var(--font-title);
-  font-size: 14px;
-  font-weight: 600;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-}
-
-.hero-name {
-  margin-bottom: 18px;
-  font-size: 68px;
-  font-weight: 800;
-}
-
-.hero-role {
   display: flex;
   align-items: center;
-  min-height: 48px;
-  margin-bottom: 14px;
-  color: var(--accent);
+  justify-content: center;
+  min-height: 100vh;
+  padding: 120px var(--gutter);
+  overflow: hidden;
+  background: #0a0a0c;
+}
+
+/* The background photo fills the whole panel */
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.hero-bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* A dark layer so the white text stays readable on top */
+.hero-shade {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(ellipse at center, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0.6)),
+    linear-gradient(rgba(0, 0, 0, 0.45), transparent 30%, transparent 60%, rgba(0, 0, 0, 0.55));
+}
+
+.hero-center {
+  position: relative;   /* sits above the two layers above */
+  text-align: center;
+  color: #fff;
+}
+
+/* The small round arrow above the name */
+.scroll-dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  color: #fff;
+  font-size: 15px;
+}
+
+.scroll-dot:hover {
+  background: #fff;
+  color: #14171d;
+}
+
+.hero-hi {
+  margin: 0 0 6px;
+  color: rgba(255, 255, 255, 0.92);
   font-family: var(--font-title);
-  font-size: 24px;
-  font-weight: 600;
+  font-size: 30px;
+  font-weight: 400;
+}
+
+/* The huge headline. Anton is a tall, narrow, heavy font,
+   so it fills the screen without the lines running long. */
+.hero-name {
+  margin: 0;
+  font-family: "Anton", Arial, sans-serif;
+  font-size: 150px;
+  font-weight: 400;
+  line-height: 0.9;
+  letter-spacing: -1px;
+  color: #fff;
+  text-transform: none;
+}
+
+.hero-tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 26px;
+  margin: 18px 0 0;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 15px;
 }
 
 /* The blinking bar after the typed words */
 .caret {
   width: 2px;
-  height: 26px;
+  height: 16px;
   margin-left: 3px;
   background: var(--accent);
   animation: blink 1s infinite;
@@ -356,18 +446,50 @@ a:hover {
   50% { opacity: 0; }
 }
 
-.hero-intro {
-  max-width: 560px;
-  color: var(--muted);
-  font-size: 17px;
+/* The two pills in the bottom corners of the hero */
+.hero-corners {
+  position: absolute;
+  bottom: 28px;
+  left: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0 var(--gutter);
 }
 
-.hero-actions {
+/* ----- The three numbers, now at the top of About ----- */
+
+.stats {
   display: flex;
   flex-wrap: wrap;
-  gap: 12px;
-  margin: 26px 0 34px;
+  gap: 44px;
+  margin-bottom: 44px;
+  padding-bottom: 32px;
+  border-bottom: 1px solid var(--line);
 }
+
+.stats li {
+  display: flex;
+  flex-direction: column;
+}
+
+/* JavaScript counts these numbers up from 0 */
+.stat-number {
+  color: var(--text);
+  font-family: var(--font-title);
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.stats span {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+/* ----- Buttons used elsewhere on the page ----- */
 
 .btn {
   display: inline-block;
@@ -392,77 +514,13 @@ a:hover {
   box-shadow: 0 10px 24px var(--accent-soft);
 }
 
-.btn-ghost {
-  border-color: var(--line);
-  color: var(--text);
-}
-
-.btn-ghost:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.stats {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 44px;
-  padding-top: 26px;
-  border-top: 1px solid var(--line);
-}
-
-.stats li {
-  display: flex;
-  flex-direction: column;
-}
-
-/* JavaScript counts these numbers up from 0 */
-.stat-number {
-  color: var(--text);
-  font-family: var(--font-title);
-  font-size: 36px;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.stats span {
-  margin-top: 6px;
-  color: var(--muted);
-  font-size: 14px;
-}
-
-.hero-photo {
-  position: relative;
-  max-width: 480px;
-  margin: 0;
-  justify-self: end;
-  border: 1px solid var(--line);
-  border-radius: 20px;
-  overflow: hidden;      /* keeps the photo inside the rounded corners */
-}
-
-.hero-photo img {
-  width: 100%;
-  aspect-ratio: 3 / 4;   /* always 3 wide by 4 tall */
-  object-fit: cover;     /* fill the box and crop the extra */
-  object-position: center 18%;
-}
-
-.hero-photo figcaption {
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  padding: 30px 18px 14px;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
-  color: #fff;
-  font-size: 13px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-}
-
 /* The scrolling strip of tool names. The words are written
    twice in the HTML and we slide the strip left by half its
    width, so the loop never shows a gap. */
+.marquee-section {
+  padding: 0;
+}
+
 .marquee {
   background: var(--bg-alt);
   border-top: 1px solid var(--line);
@@ -643,15 +701,17 @@ a:hover {
   padding-left: 30px;
 }
 
-/* The orange line running down the left */
-.timeline::before {
-  content: "";
+/* The orange line running down the left.
+   transform-origin: top means it grows downwards when
+   JavaScript scales it, rather than out from the middle. */
+.timeline-line {
   position: absolute;
   top: 8px;
   bottom: 8px;
   left: 7px;
   width: 2px;
   background: var(--accent);
+  transform-origin: top center;
 }
 
 .job {
@@ -755,15 +815,46 @@ a:hover {
   font-size: 14px;
 }
 
+/* =========================================================
+   SIDEWAYS SECTIONS
+
+   Work and Gallery stick to the screen while their row of
+   cards slides across. The section is exactly one screen
+   tall, the heading sits at the top, and the row below it
+   is free to be wider than the window.
+   ========================================================= */
+
+.h-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 26px;
+  height: 100vh;
+  padding: 90px 0 40px;
+  overflow: hidden;   /* hides the part of the row that is off-screen */
+}
+
+.h-section .section-head {
+  margin-bottom: 0;
+}
+
+.h-track {
+  width: 100%;
+}
+
+/* ----- Work ----- */
+
 .work-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  display: flex;
   gap: 20px;
+  width: max-content;      /* as wide as all the cards together */
+  padding: 0 var(--gutter);
 }
 
 .work-card {
   display: flex;
   flex-direction: column;
+  flex: 0 0 380px;         /* fixed width, never shrinks */
   overflow: hidden;
 }
 
@@ -846,13 +937,15 @@ a:hover {
    ========================================================= */
 
 .gallery-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 14px;
+  display: flex;
+  gap: 16px;
+  width: max-content;
+  padding: 0 var(--gutter);
 }
 
 .photo {
   position: relative;
+  flex: 0 0 300px;        /* fixed width, never shrinks */
   margin: 0;
   border: 1px solid var(--line);
   border-radius: 14px;
@@ -1125,20 +1218,109 @@ a:hover {
 
 
 /* =========================================================
-   FADE IN ON SCROLL
-   Anything with class="reveal" starts invisible and slightly
-   low. JavaScript adds "visible" when it scrolls into view.
+   WELCOME SCREEN
+   Covers the page while it loads. GSAP slides it up and out
+   in main.js, then the hero animates in behind it.
    ========================================================= */
 
-.reveal {
-  opacity: 0;
-  transform: translateY(22px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+.preloader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 300;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: var(--bg);
 }
 
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
+.preloader-inner {
+  width: 320px;
+  max-width: 70%;
+  text-align: center;
+}
+
+/* The big greeting that cycles through languages */
+.preloader-hello {
+  margin: 0 0 6px;
+  color: var(--text);
+  font-family: var(--font-title);
+  font-size: 44px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* The small orange dot in front of it */
+.preloader-hello::before {
+  content: "";
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  margin-right: 10px;
+  border-radius: 50%;
+  background: var(--accent);
+  vertical-align: middle;
+}
+
+.preloader-name {
+  margin: 0 0 18px;
+  color: var(--text);
+  font-family: var(--font-title);
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+/* The thin bar that fills up. JavaScript grows the span. */
+.preloader-bar {
+  height: 2px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.preloader-bar span {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--accent);
+}
+
+/* The counter on the right of the bar */
+.preloader-percent {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-family: var(--font-title);
+  font-size: 12px;
+  letter-spacing: 2px;
+}
+
+
+/* =========================================================
+   ANIMATION HOOKS
+   GSAP animates anything with class="reveal" as it scrolls
+   into view. Note that we do NOT hide these in CSS: if GSAP
+   ever fails to load, the content must still be readable.
+   ========================================================= */
+
+/* Each line of the big hero name sits on its own row */
+.hero-name .line {
+  display: block;
+  overflow: hidden;   /* lets the letters slide up from nothing */
+}
+
+/* JavaScript splits the heading into one span per letter.
+   inline-block is what allows each one to be moved. */
+.letter {
+  display: inline-block;
+}
+
+/* Tells the browser these will move, so it prepares for it */
+.hero-bg img,
+.letter {
+  will-change: transform;
 }
 
 
@@ -1150,8 +1332,7 @@ a:hover {
 
 /* ----- Laptops and small desktops ----- */
 @media (max-width: 1100px) {
-  .skills-grid,
-  .work-grid {
+  .skills-grid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
@@ -1163,20 +1344,17 @@ a:hover {
   }
 
   /* Put these side-by-side layouts into one column */
-  .hero-grid,
   .about-grid,
   .contact-grid {
     grid-template-columns: 1fr;
   }
 
-  .hero-photo {
-    max-width: 400px;
-    justify-self: start;
-    order: -1;          /* moves the photo above the text */
+  .hero-name {
+    font-size: 96px;
   }
 
-  .hero-name {
-    font-size: 48px;
+  .hero-hi {
+    font-size: 24px;
   }
 
   .section-title {
@@ -1229,9 +1407,7 @@ a:hover {
     border-left: 3px solid var(--accent);
   }
 
-  .gallery-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+
 }
 
 /* ----- Phones ----- */
@@ -1241,21 +1417,35 @@ a:hover {
   }
 
   .hero {
-    padding-top: 56px;
-  }
-
-  .hero-grid {
-    gap: 32px;
-    padding-bottom: 44px;
+    padding: 100px var(--gutter) 90px;
   }
 
   .hero-name {
-    font-size: 36px;
+    font-size: 54px;
   }
 
-  .hero-role {
-    min-height: 36px;
-    font-size: 18px;
+  .hero-hi {
+    font-size: 19px;
+  }
+
+  .scroll-dot {
+    margin-bottom: 18px;
+  }
+
+  .hero-tag {
+    font-size: 13px;
+  }
+
+  /* Stack the corner pills and centre them */
+  .hero-corners {
+    bottom: 20px;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .pill {
+    padding: 9px 15px;
+    font-size: 13px;
   }
 
   .section {
@@ -1278,18 +1468,23 @@ a:hover {
     font-size: 28px;
   }
 
-  .brand-text {
-    display: none;
-  }
-
-  .hero-photo {
-    max-width: 100%;
-  }
-
   /* One card per row */
-  .skills-grid,
-  .work-grid {
+  .skills-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Smaller cards so a whole one fits on a phone screen */
+  .work-card {
+    flex-basis: 78vw;
+  }
+
+  .photo {
+    flex-basis: 62vw;
+  }
+
+  .h-section {
+    gap: 18px;
+    padding: 80px 0 30px;
   }
 
   /* Stack the label above the value */
@@ -1302,6 +1497,8 @@ a:hover {
   .gallery-grid {
     gap: 10px;
   }
+
+
 
   /* A phone has no hovering, so always show the caption */
   .photo figcaption {
@@ -1340,13 +1537,9 @@ a:hover {
   .caret {
     animation: none;
   }
-
-  .reveal {
-    opacity: 1;
-    transform: none;
-    transition: none;
-  }
 }
+/* main.js also checks this setting and skips the GSAP
+   animations, showing everything in its finished position. */
 
 
 /* =========================================================
@@ -1360,17 +1553,13 @@ a:hover {
   .top-btn,
   .lightbox,
   .progress,
-  .hero-actions {
+  .preloader,
+  .hero-corners {
     display: none;
   }
 
   body {
     background: #fff;
     color: #000;
-  }
-
-  .reveal {
-    opacity: 1;
-    transform: none;
   }
 }

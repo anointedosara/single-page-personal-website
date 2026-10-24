@@ -21,11 +21,28 @@
   <!-- Fonts, then our own stylesheet -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
+
+  <!-- ============================================================
+       WELCOME SCREEN
+       Covers the page while it loads. main.js animates the bar,
+       then slides this whole panel up out of the way.
+       ============================================================ -->
+  <div class="preloader" id="preloader">
+    <div class="preloader-inner">
+      <!-- main.js cycles this through a few languages -->
+      <p class="preloader-hello" id="preloaderHello">Hello</p>
+      <p class="preloader-name" id="preloaderName">Anointed Osara</p>
+      <div class="preloader-bar">
+        <span id="preloaderFill"></span>
+      </div>
+      <p class="preloader-percent" id="preloaderPercent">0%</p>
+    </div>
+  </div>
 
   <!-- Lets keyboard users jump straight past the menu -->
   <a class="skip-link" href="#main">Skip to content</a>
@@ -38,16 +55,15 @@
        HEADER
        ============================================================ -->
   <header class="site-header" id="header">
-    <div class="wrap header-inner">
+    <div class="header-inner">
 
-      <a class="brand" href="#home">
+      <a class="brand" href="#home" aria-label="Anointed Osara, home">
         <span class="brand-mark">AO</span>
-        <span class="brand-text">Anointed Osara</span>
       </a>
 
+      <!-- The floating pill of links in the middle -->
       <nav class="nav" id="nav">
         <ul class="nav-list">
-          <li><a class="nav-link" href="#home">Home</a></li>
           <li><a class="nav-link" href="#about">About</a></li>
           <li><a class="nav-link" href="#skills">Skills</a></li>
           <li><a class="nav-link" href="#experience">Experience</a></li>
@@ -62,6 +78,10 @@
         <button class="icon-btn" id="themeButton" type="button" aria-label="Switch to light theme">
           <span id="themeIcon">&#9788;</span>
         </button>
+
+        <a class="pill pill-ghost talk-pill" href="#contact">
+          Let's talk <span class="pill-arrow" aria-hidden="true">&#8599;</span>
+        </a>
 
         <!-- Opens the menu on phones and tablets -->
         <button class="menu-btn" id="menuButton" type="button" aria-label="Menu" aria-expanded="false">
@@ -82,57 +102,49 @@
          HERO
          ============================================================ -->
     <section class="hero" id="home">
-      <div class="hero-glow"></div>
 
-      <div class="wrap hero-grid">
+      <!-- The background photo and the dark layer over it.
+           aria-hidden because they are decoration, not content. -->
+      <div class="hero-bg" aria-hidden="true">
+        <img src="images/hero-bg.jpg" alt="">
+      </div>
+      <div class="hero-shade" aria-hidden="true"></div>
 
-        <div>
-          <p class="eyebrow">Hello, I'm</p>
+      <div class="hero-center">
 
-          <h1 class="hero-name">Anointed<br>Ihinosen Osara</h1>
+        <a class="scroll-dot" href="#about" aria-label="Scroll to about">
+          <span aria-hidden="true">&darr;</span>
+        </a>
 
-          <!-- JavaScript types the job titles into this span -->
-          <p class="hero-role">
-            <span id="typed"></span><span class="caret"></span>
-          </p>
+        <p class="hero-hi">Anointed Osara</p>
 
-          <p class="hero-intro">
-            AI-first frontend developer with 3 years of experience, including 1 year
-            professional, building scalable, responsive web apps and full-stack
-            products in React and Next.js.
-          </p>
+        <!-- aria-label keeps this readable to screen readers
+             after JavaScript splits it into single letters -->
+        <h1 class="hero-name" aria-label="Frontend developer">
+          <span class="line">Frontend</span>
+          <span class="line">developer.</span>
+        </h1>
 
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="#work">View my work</a>
-            <a class="btn btn-ghost" href="anointed-osara-cv.pdf" download>Download CV</a>
-            <a class="btn btn-ghost" href="#contact">Get in touch</a>
-          </div>
-
-          <!-- JavaScript counts these up from 0. It reads the
-               target from data-count and the "+" from data-suffix. -->
-          <ul class="stats" id="stats">
-            <li>
-              <strong class="stat-number" data-count="20" data-suffix="+">0</strong>
-              <span>Projects shipped</span>
-            </li>
-            <li>
-              <strong class="stat-number" data-count="3">0</strong>
-              <span>Years building</span>
-            </li>
-            <li>
-              <strong class="stat-number" data-count="1">0</strong>
-              <span>Year professional</span>
-            </li>
-          </ul>
-        </div>
-
-        <figure class="hero-photo reveal">
-          <img src="images/photo-profile.jpg" width="810" height="1080"
-               alt="Anointed Osara standing outdoors in a tan suit and tie">
-          <figcaption>Benin City, Nigeria</figcaption>
-        </figure>
+        <!-- JavaScript types the job titles into this span -->
+        <p class="hero-tag">
+          <span id="typed"></span><span class="caret"></span>
+        </p>
 
       </div>
+
+      <!-- The two pills in the bottom corners -->
+      <div class="hero-corners">
+        <a class="pill pill-solid" href="#work">
+          View work <span class="pill-arrow" aria-hidden="true">&#8599;</span>
+        </a>
+        <a class="pill pill-solid" href="#contact">
+          Let's talk <span class="pill-arrow" aria-hidden="true">&#8599;</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- A separate strip under the hero -->
+    <section class="marquee-section">
 
       <!-- The scrolling strip of tool names. The list is written
            twice so the animation can loop without a gap. -->
@@ -178,6 +190,23 @@
           <p class="section-tag">01 - About</p>
           <h2 class="section-title">A developer who ships</h2>
         </div>
+
+        <!-- JavaScript counts these up from 0. It reads the
+             target from data-count and the "+" from data-suffix. -->
+        <ul class="stats" id="stats">
+          <li>
+            <strong class="stat-number" data-count="20" data-suffix="+">0</strong>
+            <span>Projects shipped</span>
+          </li>
+          <li>
+            <strong class="stat-number" data-count="3">0</strong>
+            <span>Years building</span>
+          </li>
+          <li>
+            <strong class="stat-number" data-count="1">0</strong>
+            <span>Year professional</span>
+          </li>
+        </ul>
 
         <div class="about-grid">
 
@@ -316,6 +345,9 @@
 
         <div class="timeline">
 
+          <!-- The orange line. GSAP grows it downwards as you scroll. -->
+          <div class="timeline-line"></div>
+
           <div class="job reveal">
             <div class="job-dot"></div>
             <p class="job-date">07/2023 - 01/2024</p>
@@ -379,14 +411,15 @@
          Each card carries data-tech. The filter buttons carry
          data-filter. JavaScript compares the two.
          ============================================================ -->
-    <section class="section section-alt" id="work">
-      <div class="wrap">
+    <section class="section section-alt h-section" id="work">
+      <div class="wrap h-head">
 
         <div class="section-head reveal">
           <p class="section-tag">04 - Work</p>
           <h2 class="section-title">Selected projects</h2>
           <p class="section-sub">
-            Seven live products. Every screenshot below is the real deployed site.
+            Seven live products. Scroll sideways - every screenshot is the real
+            deployed site.
           </p>
         </div>
 
@@ -399,7 +432,10 @@
         </div>
 
         <p class="filter-note" id="filterNote"></p>
+      </div>
 
+      <!-- The row that slides sideways as you scroll -->
+      <div class="h-track">
         <div class="work-grid">
 
           <div class="card work-card reveal" data-tech="nextjs typescript tailwind">
@@ -587,17 +623,20 @@
          Clicking a photo opens the big viewer at the bottom of
          this file. JavaScript reads the image and the caption.
          ============================================================ -->
-    <section class="section" id="gallery">
-      <div class="wrap">
+    <section class="section h-section" id="gallery">
+      <div class="wrap h-head">
 
         <div class="section-head reveal">
           <p class="section-tag">05 - Gallery</p>
           <h2 class="section-title">Life outside the editor</h2>
           <p class="section-sub">
-            Click any photo to open it full size. Arrow keys move between them.
+            Scroll sideways, then click any photo to open it full size.
           </p>
         </div>
+      </div>
 
+      <!-- The row that slides sideways as you scroll -->
+      <div class="h-track">
         <div class="gallery-grid">
 
           <figure class="photo reveal" tabindex="0" role="button">
@@ -766,6 +805,11 @@
   <!-- Appears once you scroll down -->
   <button class="top-btn" id="topButton" type="button" aria-label="Back to top" hidden>&uarr;</button>
 
+
+  <!-- GSAP does the animation. ScrollTrigger is the add-on that
+       starts an animation when an element scrolls into view. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
   <script src="js/main.js"></script>
 </body>

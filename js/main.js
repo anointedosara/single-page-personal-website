@@ -1,16 +1,19 @@
 /* =========================================================
    Anointed Osara - personal website
-   Plain JavaScript. Each numbered part below does one job:
+
+   The page is split in two:
+     Parts 1-6  are plain JavaScript and run the interface.
+     Parts 7-9  use GSAP and run the animation.
 
      1. Light / dark theme button
      2. Mobile menu
      3. Things that happen while you scroll
-     4. Fade sections in as you reach them
-     5. The typing effect in the hero
-     6. Counting the numbers up
-     7. Filtering the projects
-     8. The photo viewer (lightbox)
-     9. Checking the contact form
+     4. Filtering the projects
+     5. The photo viewer (lightbox)
+     6. Checking the contact form
+     7. The welcome screen
+     8. The hero animation
+     9. Scroll animations
     10. The year in the footer
    ========================================================= */
 
@@ -51,7 +54,7 @@ function setTheme(name) {
   try {
     localStorage.setItem("theme", name);
   } catch (error) {
-    // Nothing to do - the page still works, it just will not remember.
+    // Nothing to do - the page works, it just will not remember.
   }
 }
 
@@ -179,137 +182,7 @@ topButton.addEventListener("click", function () {
 
 
 /* =========================================================
-   4. FADE SECTIONS IN AS YOU REACH THEM
-
-   For each box we ask how far its top is from the top of the
-   window. If that is less than the window height, the box is
-   on screen, so we add "visible" and CSS fades it in.
-   ========================================================= */
-
-var revealBoxes = document.querySelectorAll(".reveal");
-
-function revealOnScroll() {
-  revealBoxes.forEach(function (box) {
-    var distanceFromTop = box.getBoundingClientRect().top;
-
-    if (distanceFromTop < window.innerHeight - 60) {
-      box.classList.add("visible");
-    }
-  });
-}
-
-window.addEventListener("scroll", revealOnScroll);
-window.addEventListener("resize", revealOnScroll);
-revealOnScroll();
-
-
-/* =========================================================
-   5. THE TYPING EFFECT IN THE HERO
-
-   We show one more letter each time, wait at the end of the
-   word, then delete it one letter at a time and move to the
-   next word. setTimeout calls the function again, which is
-   how the loop keeps going.
-   ========================================================= */
-
-var typedText = document.getElementById("typed");
-
-var roles = [
-  "Frontend Developer",
-  "React & Next.js",
-  "Full-Stack Capable",
-  "AI-First Builder"
-];
-
-var roleNumber = 0;      // which word we are on
-var letterCount = 0;     // how many letters are showing
-var deleting = false;    // typing forwards or backwards?
-
-function typeEffect() {
-  var word = roles[roleNumber];
-  typedText.textContent = word.slice(0, letterCount);
-
-  var wait = 85;
-
-  if (deleting === false && letterCount === word.length) {
-    // Word finished - pause, then start deleting
-    deleting = true;
-    wait = 1600;
-  } else if (deleting === true && letterCount === 0) {
-    // Word gone - move to the next one
-    deleting = false;
-    roleNumber = roleNumber + 1;
-    if (roleNumber === roles.length) {
-      roleNumber = 0;
-    }
-    wait = 320;
-  } else if (deleting === true) {
-    letterCount = letterCount - 1;
-    wait = 45;
-  } else {
-    letterCount = letterCount + 1;
-  }
-
-  setTimeout(typeEffect, wait);
-}
-
-typeEffect();
-
-
-/* =========================================================
-   6. COUNTING THE NUMBERS UP
-
-   setInterval runs a function again and again on a timer.
-   We add 1 each time and stop with clearInterval once we
-   reach the target. The target is read from the HTML.
-   ========================================================= */
-
-var statNumbers = document.querySelectorAll(".stat-number");
-var statsStarted = false;
-
-function countUp(element) {
-  var target = Number(element.getAttribute("data-count"));
-  var suffix = element.getAttribute("data-suffix");
-  if (suffix === null) {
-    suffix = "";
-  }
-
-  var current = 0;
-
-  var timer = setInterval(function () {
-    current = current + 1;
-    element.textContent = current + suffix;
-
-    if (current >= target) {
-      clearInterval(timer);
-    }
-  }, 60);
-}
-
-function startCounting() {
-  // Only ever run this once
-  if (statsStarted === true) {
-    return;
-  }
-
-  var stats = document.getElementById("stats");
-  var distanceFromTop = stats.getBoundingClientRect().top;
-
-  if (distanceFromTop < window.innerHeight) {
-    statsStarted = true;
-
-    statNumbers.forEach(function (element) {
-      countUp(element);
-    });
-  }
-}
-
-window.addEventListener("scroll", startCounting);
-startCounting();
-
-
-/* =========================================================
-   7. FILTERING THE PROJECTS
+   4. FILTERING THE PROJECTS
 
    Each card has data-tech in the HTML, like
    data-tech="nextjs typescript mongodb".
@@ -333,6 +206,7 @@ filterButtons.forEach(function (button) {
 
     // Show or hide each card, and count how many are left
     var shown = 0;
+    var stillVisible = [];
 
     workCards.forEach(function (card) {
       var techList = card.getAttribute("data-tech").split(" ");
@@ -346,11 +220,28 @@ filterButtons.forEach(function (button) {
 
       if (matches === true) {
         card.classList.remove("hidden");
+        stillVisible.push(card);
         shown = shown + 1;
       } else {
         card.classList.add("hidden");
       }
     });
+
+    // Pop the remaining cards back in, one just after another
+    if (animationsOn === true) {
+      gsap.from(stillVisible, {
+        opacity: 0,
+        y: 20,
+        scale: 0.96,
+        duration: 0.4,
+        stagger: 0.05,
+        ease: "power2.out"
+      });
+
+      /* The row is now a different width, so the sideways
+         scrolling has to measure it again. */
+      ScrollTrigger.refresh();
+    }
 
     // A short message under the buttons
     if (wanted === "all") {
@@ -365,7 +256,7 @@ filterButtons.forEach(function (button) {
 
 
 /* =========================================================
-   8. THE PHOTO VIEWER (LIGHTBOX)
+   5. THE PHOTO VIEWER (LIGHTBOX)
 
    Clicking a gallery photo copies it into the big viewer.
    We keep the position of the photo in a variable so the
@@ -399,6 +290,11 @@ function showPhoto(number) {
   lightboxImage.src = image.getAttribute("src");
   lightboxImage.alt = image.getAttribute("alt");
   lightboxCaption.textContent = caption.textContent;
+
+  // A small fade so swapping photos is not a hard cut
+  if (animationsOn === true) {
+    gsap.from(lightboxImage, { opacity: 0, scale: 0.97, duration: 0.3 });
+  }
 }
 
 function openLightbox(number) {
@@ -406,6 +302,10 @@ function openLightbox(number) {
   lightbox.hidden = false;
   document.body.classList.add("no-scroll");
   closeButton.focus();
+
+  if (animationsOn === true) {
+    gsap.from(lightbox, { opacity: 0, duration: 0.25 });
+  }
 }
 
 function closeLightbox() {
@@ -465,7 +365,7 @@ document.addEventListener("keydown", function (event) {
 
 
 /* =========================================================
-   9. CHECKING THE CONTACT FORM
+   6. CHECKING THE CONTACT FORM
 
    This page is just files on a web host, with no server to
    send a message to. So we check what was typed, then hand
@@ -538,6 +438,13 @@ contactForm.addEventListener("submit", function (event) {
   if (problems > 0) {
     formStatus.textContent = "Please fix the highlighted fields.";
     formStatus.classList.remove("success");
+
+    // A short shake to draw the eye to the problem
+    if (animationsOn === true) {
+      gsap.fromTo(contactForm,
+        { x: -6 },
+        { x: 0, duration: 0.5, ease: "elastic.out(1, 0.3)" });
+    }
     return;
   }
 
@@ -563,6 +470,512 @@ contactForm.addEventListener("submit", function (event) {
     showError(field, "");
   });
 });
+
+
+/* =========================================================
+   THE ANIMATION PARTS START HERE
+
+   Everything below uses GSAP, loaded from a CDN in the HTML.
+
+   We turn the animation off in two cases:
+     - GSAP did not load (no internet, blocked CDN)
+     - the visitor asked their computer to avoid animation
+   In both cases the page simply shows everything in place,
+   which is why nothing above is hidden in the CSS.
+   ========================================================= */
+
+var gsapLoaded = typeof gsap !== "undefined";
+var prefersStill = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+var animationsOn = gsapLoaded && prefersStill === false;
+
+if (gsapLoaded === true) {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+/* Splits a piece of text into one <span> per letter, so each
+   letter can be animated on its own. Returns nothing - it
+   replaces what is inside the element. */
+function splitIntoLetters(element) {
+  var text = element.textContent;
+  element.textContent = "";
+
+  for (var i = 0; i < text.length; i++) {
+    var span = document.createElement("span");
+    span.className = "letter";
+
+    // A plain space would collapse, so use a non-breaking one
+    if (text[i] === " ") {
+      span.innerHTML = "&nbsp;";
+    } else {
+      span.textContent = text[i];
+    }
+
+    element.appendChild(span);
+  }
+}
+
+
+/* =========================================================
+   7. THE WELCOME SCREEN
+
+   A greeting cycles through a few languages while a bar
+   fills up, then the whole panel slides away upwards.
+   ========================================================= */
+
+var preloader = document.getElementById("preloader");
+
+function runWelcome(whenFinished) {
+  // No animation? Just remove the panel and move on.
+  if (animationsOn === false) {
+    preloader.remove();
+    whenFinished();
+    return;
+  }
+
+  var hello = document.getElementById("preloaderHello");
+  var fill = document.getElementById("preloaderFill");
+  var percent = document.getElementById("preloaderPercent");
+
+  // A timeline plays several animations one after another
+  var intro = gsap.timeline();
+
+  intro.from(".preloader-inner", { opacity: 0, y: 20, duration: 0.5 });
+
+  /* Blink "Hello" slowly, three times.
+     yoyo makes the tween play backwards on each repeat, so
+     5 repeats give us 3 fades out and 3 fades back in. */
+  intro.to(hello, {
+    opacity: 0.12,
+    duration: 0.4,
+    repeat: 5,
+    yoyo: true,
+    ease: "sine.inOut"
+  });
+
+  // Fill the bar and count the percentage while it blinks.
+  // "<" means "start at the same moment as the one before".
+  intro.to(fill, { width: "100%", duration: 2.4, ease: "power1.inOut" }, "<");
+  intro.to({ value: 0 }, {
+    value: 100,
+    duration: 2.4,
+    ease: "power1.inOut",
+    onUpdate: function () {
+      percent.textContent = Math.round(this.targets()[0].value) + "%";
+    }
+  }, "<");
+
+  // Slide the panel up and out, then start the hero
+  intro.to(preloader, {
+    yPercent: -100,
+    duration: 0.8,
+    ease: "power3.inOut",
+    onComplete: function () {
+      preloader.remove();
+      whenFinished();
+    }
+  }, "+=0.2");
+}
+
+
+/* =========================================================
+   8. THE HERO ANIMATION
+
+   Runs once the welcome screen is out of the way.
+   ========================================================= */
+
+function runHero() {
+  if (animationsOn === false) {
+    return;
+  }
+
+  // Split the big name so the letters can rise one by one
+  var nameLines = document.querySelectorAll(".hero-name .line");
+  nameLines.forEach(splitIntoLetters);
+
+  var hero = gsap.timeline();
+
+  // The background photo settles back from a slow zoom
+  hero.from(".hero-bg img", {
+    scale: 1.15,
+    duration: 1.8,
+    ease: "power3.out"
+  }, 0);
+
+  hero.from(".scroll-dot", { opacity: 0, y: -10, duration: 0.5 }, 0.2);
+  hero.from(".hero-hi", { opacity: 0, y: 16, duration: 0.5 }, 0.35);
+
+  // The big headline rises letter by letter from behind its line
+  hero.from(".hero-name .letter", {
+    yPercent: 110,
+    opacity: 0,
+    duration: 0.8,
+    stagger: 0.03,
+    ease: "power3.out"
+  }, 0.45);
+
+  hero.from(".hero-tag", { opacity: 0, y: 12, duration: 0.5 }, "-=0.3");
+
+  hero.from(".hero-corners .pill", {
+    opacity: 0,
+    y: 20,
+    duration: 0.5,
+    stagger: 0.1
+  }, "-=0.4");
+
+  // The header floats in last
+  hero.from(".header-inner > *", {
+    opacity: 0,
+    y: -14,
+    duration: 0.5,
+    stagger: 0.08
+  }, "-=0.5");
+}
+
+
+/* Counts the three numbers up when they scroll into view.
+   They live in the About section now, not in the hero. */
+function runCounters() {
+  if (animationsOn === false) {
+    return;
+  }
+
+  document.querySelectorAll(".stat-number").forEach(function (element) {
+    var target = Number(element.getAttribute("data-count"));
+    var suffix = element.getAttribute("data-suffix");
+    if (suffix === null) {
+      suffix = "";
+    }
+
+    gsap.to({ value: 0 }, {
+      scrollTrigger: { trigger: "#stats", start: "top 85%" },
+      value: target,
+      duration: 1.4,
+      ease: "power2.out",
+      onUpdate: function () {
+        element.textContent = Math.round(this.targets()[0].value) + suffix;
+      }
+    });
+  });
+}
+
+
+/* =========================================================
+   THE TYPING EFFECT IN THE HERO
+
+   We show one more letter each time, wait at the end of the
+   word, then delete it one letter at a time and move to the
+   next word. setTimeout calls the function again, which is
+   how the loop keeps going.
+   ========================================================= */
+
+var typedText = document.getElementById("typed");
+
+var roles = [
+  "Frontend Developer",
+  "React & Next.js",
+  "Full-Stack Capable",
+  "AI-First Builder"
+];
+
+var roleNumber = 0;        // which word we are on
+var letterCount = 0;       // how many letters are showing
+var deleting = false;      // typing forwards or backwards?
+var typingStarted = false; // so it can never be started twice
+
+function startTyping() {
+  if (typingStarted === true) {
+    return;
+  }
+  typingStarted = true;
+  typeEffect();
+}
+
+function typeEffect() {
+  var word = roles[roleNumber];
+  typedText.textContent = word.slice(0, letterCount);
+
+  var wait = 85;
+
+  if (deleting === false && letterCount === word.length) {
+    // Word finished - pause, then start deleting
+    deleting = true;
+    wait = 1600;
+  } else if (deleting === true && letterCount === 0) {
+    // Word gone - move to the next one
+    deleting = false;
+    roleNumber = roleNumber + 1;
+    if (roleNumber === roles.length) {
+      roleNumber = 0;
+    }
+    wait = 320;
+  } else if (deleting === true) {
+    letterCount = letterCount - 1;
+    wait = 45;
+  } else {
+    letterCount = letterCount + 1;
+  }
+
+  setTimeout(typeEffect, wait);
+}
+
+
+/* =========================================================
+   9. SCROLL ANIMATIONS
+
+   ScrollTrigger starts an animation when an element reaches
+   a point on the screen. The settings we reuse are:
+
+     scrollTrigger: {
+       trigger: <the element to watch>,
+       start: "top 85%"   -> fire when its top reaches 85%
+                             of the way down the window
+     }
+   ========================================================= */
+
+function runScrollAnimations() {
+  if (animationsOn === false) {
+    return;
+  }
+
+  // ---- Section headings: tag, title and subtitle in turn ----
+  document.querySelectorAll(".section-head").forEach(function (head) {
+    gsap.from(head.children, {
+      scrollTrigger: { trigger: head, start: "top 85%" },
+      opacity: 0,
+      y: 30,
+      duration: 0.7,
+      stagger: 0.1,
+      ease: "power3.out"
+    });
+  });
+
+  // ---- About: paragraphs rise, fact rows come in after ----
+  gsap.from(".about-text p", {
+    scrollTrigger: { trigger: ".about-text", start: "top 85%" },
+    opacity: 0,
+    y: 24,
+    duration: 0.6,
+    stagger: 0.12
+  });
+
+  gsap.from(".facts li", {
+    scrollTrigger: { trigger: ".facts", start: "top 85%" },
+    opacity: 0,
+    x: 30,
+    duration: 0.5,
+    stagger: 0.08
+  });
+
+  // ---- Skill cards ----
+  gsap.from(".skill-card", {
+    scrollTrigger: { trigger: ".skills-grid", start: "top 85%" },
+    opacity: 0,
+    y: 40,
+    duration: 0.6,
+    stagger: 0.08,
+    ease: "power3.out"
+  });
+
+  /* ---- Experience ----
+     The orange line draws itself downwards as you scroll past
+     the timeline. scrub: true ties it to the scrollbar. */
+  gsap.from(".timeline-line", {
+    scrollTrigger: {
+      trigger: ".timeline",
+      start: "top 80%",
+      end: "bottom 60%",
+      scrub: true
+    },
+    scaleY: 0,
+    ease: "none"
+  });
+
+  // Each job slides in from the left, with its dot popping
+  document.querySelectorAll(".job").forEach(function (job) {
+    gsap.from(job, {
+      scrollTrigger: { trigger: job, start: "top 85%" },
+      opacity: 0,
+      x: -30,
+      duration: 0.6,
+      ease: "power3.out"
+    });
+
+    gsap.from(job.querySelector(".job-dot"), {
+      scrollTrigger: { trigger: job, start: "top 85%" },
+      scale: 0,
+      duration: 0.5,
+      delay: 0.2,
+      ease: "back.out(2)"
+    });
+  });
+
+  // ---- Filter buttons ----
+  gsap.from(".chip", {
+    scrollTrigger: { trigger: ".filters", start: "top 90%" },
+    opacity: 0,
+    y: 16,
+    duration: 0.4,
+    stagger: 0.05
+  });
+
+  /* The project cards and gallery photos are handled by the
+     sideways sections further down, not here. */
+
+  // ---- Contact ----
+  gsap.from(".contact-list li", {
+    scrollTrigger: { trigger: ".contact-list", start: "top 85%" },
+    opacity: 0,
+    x: -24,
+    duration: 0.5,
+    stagger: 0.08
+  });
+
+  gsap.from(".form .field, .form .btn", {
+    scrollTrigger: { trigger: ".form", start: "top 85%" },
+    opacity: 0,
+    y: 24,
+    duration: 0.5,
+    stagger: 0.08
+  });
+
+  /* ---- Hero parallax ----
+     scrub: true ties the animation to the scrollbar, so it
+     moves as you scroll instead of playing on its own. */
+  gsap.to(".hero-bg img", {
+    scrollTrigger: {
+      trigger: ".hero",
+      start: "top top",
+      end: "bottom top",
+      scrub: true
+    },
+    yPercent: 18,
+    scale: 1.1,
+    ease: "none"
+  });
+
+  // The words in the middle drift up and fade as you leave
+  gsap.to(".hero-center", {
+    scrollTrigger: {
+      trigger: ".hero",
+      start: "top top",
+      end: "bottom top",
+      scrub: true
+    },
+    y: -90,
+    opacity: 0,
+    ease: "none"
+  });
+}
+
+
+/* =========================================================
+   HORIZONTAL SCROLL
+
+   Used by Work and Gallery. The section sticks to the screen
+   ("pin") and, instead of the page moving down, the row of
+   cards slides sideways. The distance you scroll is the
+   width of the row minus one screen, so it ends exactly when
+   the last card reaches the right edge.
+   ========================================================= */
+
+function makeHorizontal(sectionSelector, rowSelector) {
+  var section = document.querySelector(sectionSelector);
+  var row = document.querySelector(rowSelector);
+
+  if (section === null || row === null) {
+    return;
+  }
+
+  // How far the row has to travel
+  function distance() {
+    return row.scrollWidth - window.innerWidth;
+  }
+
+  gsap.to(row, {
+    x: function () {
+      return -distance();
+    },
+    ease: "none",
+    scrollTrigger: {
+      trigger: section,
+      start: "top top",
+      // A longer end means a slower, smoother sideways move
+      end: function () {
+        return "+=" + (distance() + window.innerHeight * 0.5);
+      },
+      pin: true,
+      scrub: 1,              // 1 = lag slightly behind the scrollbar
+      anticipatePin: 1,
+      invalidateOnRefresh: true   // recalculate if the window resizes
+    }
+  });
+}
+
+
+/* Starts the two sideways sections. They are set up after the
+   images have loaded, so the widths are measured correctly. */
+function runHorizontalSections() {
+  if (animationsOn === false) {
+    return;
+  }
+
+  makeHorizontal("#work", ".work-grid");
+  makeHorizontal("#gallery", ".gallery-grid");
+}
+
+
+/* =========================================================
+   START EVERYTHING
+   The welcome screen runs first, then the hero, then the
+   scroll animations are set up.
+   ========================================================= */
+
+var pageStarted = false;
+
+function startPage() {
+  // Make sure this can only ever happen once
+  if (pageStarted === true) {
+    return;
+  }
+  pageStarted = true;
+
+  runHero();
+  runScrollAnimations();
+  runCounters();
+  runHorizontalSections();
+  startTyping();
+
+  /* Images change the height of the page as they load, which
+     moves every scroll trigger. Measure again once they are in. */
+  window.addEventListener("load", function () {
+    if (typeof ScrollTrigger !== "undefined") {
+      ScrollTrigger.refresh();
+    }
+  });
+}
+
+if (animationsOn === false) {
+  // No GSAP, or the visitor prefers no motion: show the page
+  // as it is and still run the typing effect.
+  if (preloader) {
+    preloader.remove();
+  }
+  startTyping();
+} else {
+  runWelcome(startPage);
+
+  /* Safety net. The welcome screen covers the whole page, so
+     if anything ever stopped the animation finishing, a
+     visitor would be stuck looking at it. After 8 seconds we
+     clear it no matter what. */
+  setTimeout(function () {
+    var panel = document.getElementById("preloader");
+    if (panel) {
+      panel.remove();
+      startPage();
+    }
+  }, 8000);
+}
 
 
 /* =========================================================
