@@ -1,0 +1,1376 @@
+/* =========================================================
+   Anointed Osara - personal website
+   Plain CSS, in the order the page is built:
+     1. Colours and fonts        6. Experience
+     2. Basic page setup         7. Work
+     3. Header and menu          8. Gallery
+     4. Hero                     9. Contact and footer
+     5. Skills                  10. Lightbox
+                                11. Screen sizes
+   ========================================================= */
+
+
+/* =========================================================
+   1. COLOURS AND FONTS
+   These are CSS variables. We write a colour once here and
+   use it everywhere with var(--name), so changing the whole
+   site means changing one line.
+   ========================================================= */
+:root {
+  --bg:          #0b0c0f;   /* page background          */
+  --bg-alt:      #0f1116;   /* every second section     */
+  --panel:       #14171d;   /* cards and boxes          */
+  --panel-2:     #1a1e26;   /* small tags inside cards  */
+  --line:        #23262d;   /* borders                  */
+  --text:        #ecedef;   /* main text                */
+  --muted:       #959ba6;   /* less important text      */
+  --accent:      #f08a2e;   /* orange                   */
+  --accent-2:    #ffc06b;   /* lighter orange           */
+  --accent-soft: rgba(240, 138, 46, 0.25);  /* glow and shadow */
+  --on-accent:   #1b0e02;   /* text on an orange button */
+
+  --gutter: 40px;           /* space at the left and right edges */
+
+  --font-title: "Sora", Arial, sans-serif;
+  --font-text:  "Inter", Arial, sans-serif;
+}
+
+/* The light theme simply replaces the same variables.
+   JavaScript puts data-theme="light" on the <html> tag. */
+[data-theme="light"] {
+  --bg:          #fbfaf8;
+  --bg-alt:      #f3f1ed;
+  --panel:       #ffffff;
+  --panel-2:     #f7f5f1;
+  --line:        #e2ded7;
+  --text:        #15171c;
+  --muted:       #5c626d;
+  --accent:      #c85a0e;
+  --accent-2:    #9c4409;
+  --accent-soft: rgba(200, 90, 14, 0.18);
+  --on-accent:   #ffffff;
+}
+
+
+/* =========================================================
+   2. BASIC PAGE SETUP
+   ========================================================= */
+
+/* Makes width and height include padding and borders, so
+   adding padding does not make a box wider than you expect. */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  /* Menu links glide down the page instead of jumping */
+  scroll-behavior: smooth;
+  /* Stops headings hiding under the sticky header */
+  scroll-padding-top: 90px;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.65;
+  overflow-x: hidden;
+}
+
+/* JavaScript adds this while the menu or photo viewer is open,
+   so the page behind cannot be scrolled */
+body.no-scroll {
+  overflow: hidden;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+p {
+  margin: 0 0 16px;
+}
+
+h1, h2, h3 {
+  font-family: var(--font-title);
+  line-height: 1.15;
+  margin: 0 0 12px;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-2);
+}
+
+/* An orange ring around whatever you select with the Tab key */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+/* A link for keyboard users. It sits off-screen until it is
+   selected with Tab, then it slides into view. */
+.skip-link {
+  position: absolute;
+  top: 10px;
+  left: -9999px;
+  z-index: 200;
+  padding: 10px 16px;
+  border-radius: 8px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  left: 16px;
+}
+
+/* Every section puts its content inside .wrap, so all the
+   sections line up with each other */
+.wrap {
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 0 var(--gutter);
+}
+
+/* The thin orange bar at the very top. JavaScript sets its width. */
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 120;
+  width: 0;
+  height: 3px;
+  background: var(--accent);
+}
+
+
+/* =========================================================
+   3. HEADER AND MENU
+   ========================================================= */
+
+.site-header {
+  position: sticky;      /* stays at the top as you scroll */
+  top: 0;
+  z-index: 110;
+  background: var(--bg);
+  border-bottom: 1px solid transparent;
+}
+
+/* JavaScript adds this once you have scrolled down a little */
+.site-header.scrolled {
+  border-bottom-color: var(--line);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 68px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text);
+  font-family: var(--font-title);
+  font-weight: 700;
+}
+
+.brand:hover {
+  color: var(--text);
+}
+
+.brand-mark {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-size: 13px;
+  line-height: 34px;
+  text-align: center;
+}
+
+.nav-list {
+  display: flex;
+  gap: 4px;
+}
+
+.nav-link {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 8px;
+  color: var(--muted);
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.nav-link:hover {
+  background: var(--panel);
+  color: var(--text);
+}
+
+/* JavaScript adds this to the link for the section you are reading */
+.nav-link.active {
+  color: var(--text);
+  border-bottom: 2px solid var(--accent);
+  border-radius: 8px 8px 0 0;
+}
+
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  z-index: 116;
+}
+
+/* The theme button and the hamburger button */
+.icon-btn,
+.menu-btn {
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: none;
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.icon-btn:hover,
+.menu-btn:hover {
+  border-color: var(--accent);
+}
+
+/* The hamburger is hidden on big screens. Section 11 shows it. */
+.menu-btn {
+  display: none;
+}
+
+/* The dark sheet behind the open mobile menu */
+.nav-scrim {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 114;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.nav-scrim.open {
+  display: block;
+}
+
+
+/* =========================================================
+   4. HERO (the big first screen)
+   ========================================================= */
+
+.hero {
+  position: relative;
+  padding-top: 100px;
+  overflow: hidden;
+}
+
+/* The soft orange glow in the top corner */
+.hero-glow {
+  position: absolute;
+  top: -220px;
+  right: -140px;
+  width: 620px;
+  height: 620px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  filter: blur(90px);    /* turns the circle into a soft cloud */
+}
+
+.hero-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.3fr 0.8fr;   /* text wider than photo */
+  gap: 60px;
+  align-items: center;
+  padding-bottom: 76px;
+}
+
+.eyebrow {
+  margin: 0 0 10px;
+  color: var(--accent);
+  font-family: var(--font-title);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.hero-name {
+  margin-bottom: 18px;
+  font-size: 68px;
+  font-weight: 800;
+}
+
+.hero-role {
+  display: flex;
+  align-items: center;
+  min-height: 48px;
+  margin-bottom: 14px;
+  color: var(--accent);
+  font-family: var(--font-title);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+/* The blinking bar after the typed words */
+.caret {
+  width: 2px;
+  height: 26px;
+  margin-left: 3px;
+  background: var(--accent);
+  animation: blink 1s infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+.hero-intro {
+  max-width: 560px;
+  color: var(--muted);
+  font-size: 17px;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin: 26px 0 34px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 12px 22px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: none;
+  font-family: var(--font-title);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.btn-primary:hover {
+  background: var(--accent-2);
+  color: var(--on-accent);
+  box-shadow: 0 10px 24px var(--accent-soft);
+}
+
+.btn-ghost {
+  border-color: var(--line);
+  color: var(--text);
+}
+
+.btn-ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 44px;
+  padding-top: 26px;
+  border-top: 1px solid var(--line);
+}
+
+.stats li {
+  display: flex;
+  flex-direction: column;
+}
+
+/* JavaScript counts these numbers up from 0 */
+.stat-number {
+  color: var(--text);
+  font-family: var(--font-title);
+  font-size: 36px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.stats span {
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.hero-photo {
+  position: relative;
+  max-width: 480px;
+  margin: 0;
+  justify-self: end;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  overflow: hidden;      /* keeps the photo inside the rounded corners */
+}
+
+.hero-photo img {
+  width: 100%;
+  aspect-ratio: 3 / 4;   /* always 3 wide by 4 tall */
+  object-fit: cover;     /* fill the box and crop the extra */
+  object-position: center 18%;
+}
+
+.hero-photo figcaption {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 30px 18px 14px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.75));
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* The scrolling strip of tool names. The words are written
+   twice in the HTML and we slide the strip left by half its
+   width, so the loop never shows a gap. */
+.marquee {
+  background: var(--bg-alt);
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  overflow: hidden;
+}
+
+.marquee-track {
+  display: flex;
+  gap: 38px;
+  width: max-content;
+  padding: 14px 19px;
+  animation: slide 34s linear infinite;
+}
+
+.marquee-track span {
+  color: var(--muted);
+  font-family: var(--font-title);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes slide {
+  to { transform: translateX(-50%); }
+}
+
+
+/* =========================================================
+   SECTION HEADINGS (used by every section below)
+   ========================================================= */
+
+.section {
+  padding: 100px 0;
+}
+
+/* Every second section gets a slightly different background */
+.section-alt {
+  background: var(--bg-alt);
+}
+
+.section-head {
+  max-width: 760px;
+  margin-bottom: 48px;
+}
+
+.section-tag {
+  margin: 0 0 10px;
+  color: var(--accent);
+  font-family: var(--font-title);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.section-title {
+  font-size: 42px;
+  font-weight: 700;
+}
+
+.section-sub {
+  margin: 0;
+  color: var(--muted);
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+}
+
+
+/* =========================================================
+   ABOUT
+   ========================================================= */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 52px;
+}
+
+.about-text p {
+  color: var(--muted);
+  font-size: 17px;
+}
+
+/* The first paragraph is brighter than the rest */
+.about-text p:first-child {
+  color: var(--text);
+}
+
+.facts {
+  align-self: start;
+  border-top: 1px solid var(--line);
+}
+
+.facts li {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 14px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.fact-key {
+  padding-top: 2px;
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.fact-value {
+  font-size: 15px;
+}
+
+
+/* =========================================================
+   5. SKILLS
+   ========================================================= */
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);   /* 3 cards per row */
+  gap: 18px;
+}
+
+.skill-card {
+  padding: 24px 22px;
+}
+
+.skill-card:hover {
+  border-color: var(--accent);
+}
+
+.skill-card h3 {
+  margin-bottom: 14px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line);
+  font-size: 17px;
+}
+
+/* The little rounded word-pills */
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tags li {
+  padding: 5px 11px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--panel-2);
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.tags.small li {
+  padding: 3px 9px;
+  font-size: 12px;
+}
+
+
+/* =========================================================
+   6. EXPERIENCE (the vertical timeline)
+   ========================================================= */
+
+.timeline {
+  position: relative;
+  max-width: 1040px;
+  padding-left: 30px;
+}
+
+/* The orange line running down the left */
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 7px;
+  width: 2px;
+  background: var(--accent);
+}
+
+.job {
+  position: relative;
+  padding-bottom: 38px;
+}
+
+.job:last-child {
+  padding-bottom: 0;
+}
+
+/* The dot on the line */
+.job-dot {
+  position: absolute;
+  top: 7px;
+  left: -30px;
+  width: 16px;
+  height: 16px;
+  border: 3px solid var(--bg);
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.job-date {
+  margin: 0 0 4px;
+  color: var(--accent);
+  font-family: var(--font-title);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.job-role {
+  margin-bottom: 2px;
+  font-size: 20px;
+}
+
+.job-place {
+  margin: 0 0 12px;
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.job-points li {
+  position: relative;
+  margin-bottom: 8px;
+  padding-left: 20px;
+  color: var(--muted);
+}
+
+/* The small orange square in front of each point */
+.job-points li::before {
+  content: "";
+  position: absolute;
+  top: 11px;
+  left: 2px;
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+
+/* =========================================================
+   7. WORK (project cards)
+   ========================================================= */
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 9px;
+  margin-bottom: 14px;
+}
+
+.chip {
+  padding: 8px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: none;
+  color: var(--muted);
+  font-family: var(--font-text);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.chip:hover {
+  border-color: var(--accent);
+  color: var(--text);
+}
+
+/* JavaScript adds this to the filter button you clicked */
+.chip.on {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.filter-note {
+  min-height: 22px;
+  margin: 0 0 22px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.work-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.work-card:hover {
+  border-color: var(--accent);
+}
+
+/* JavaScript adds this to cards the filter should hide */
+.work-card.hidden {
+  display: none;
+}
+
+.work-shot {
+  display: block;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel-2);
+}
+
+.work-shot img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  object-position: top center;
+}
+
+.work-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;               /* makes every card the same height */
+  padding: 20px 20px 22px;
+}
+
+.work-kind {
+  margin: 0 0 4px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.work-name {
+  margin-bottom: 8px;
+  font-size: 21px;
+}
+
+.work-sum {
+  color: var(--muted);
+  font-size: 15px;
+}
+
+.work-body .tags {
+  margin: 4px 0 18px;
+}
+
+.work-links {
+  display: flex;
+  gap: 18px;
+  margin: auto 0 0;      /* pushes the links to the bottom of the card */
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-title);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.work-links .code-link {
+  color: var(--muted);
+}
+
+.work-links .code-link:hover {
+  color: var(--text);
+}
+
+
+/* =========================================================
+   8. GALLERY
+   Four photos per row on a computer and two on a phone,
+   so the rows are always full.
+   ========================================================= */
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.photo {
+  position: relative;
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: var(--panel-2);
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.photo img {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center 22%;
+}
+
+/* The caption is hidden until you point at the photo */
+.photo figcaption {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  padding: 40px 14px 13px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.85));
+  color: #fff;
+  font-size: 13px;
+  line-height: 1.4;
+  opacity: 0;
+}
+
+.photo:hover figcaption,
+.photo:focus figcaption {
+  opacity: 1;
+}
+
+
+/* =========================================================
+   9. CONTACT AND FOOTER
+   ========================================================= */
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  gap: 52px;
+  align-items: start;
+}
+
+.contact-list {
+  border-top: 1px solid var(--line);
+}
+
+.contact-list li {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.contact-key {
+  padding-top: 3px;
+  color: var(--muted);
+  font-size: 13px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.contact-value {
+  font-size: 16px;
+  word-break: break-word;
+}
+
+.socials {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+}
+
+/* ----- The contact form ----- */
+
+.form {
+  padding: 26px 24px 28px;
+}
+
+.field {
+  margin-bottom: 18px;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 7px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-text);
+  font-size: 15px;
+  resize: vertical;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+/* JavaScript adds this to a field the visitor needs to fix */
+.field.error input,
+.field.error textarea {
+  border-color: #e5484d;
+}
+
+.error-text {
+  min-height: 18px;
+  margin: 6px 0 0;
+  color: #ff7b7f;
+  font-size: 13px;
+}
+
+[data-theme="light"] .error-text {
+  color: #c62a2f;
+}
+
+.form-status {
+  min-height: 22px;
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.form-status.success {
+  color: var(--accent);
+}
+
+/* ----- Footer ----- */
+
+.site-footer {
+  padding: 26px 0;
+  border-top: 1px solid var(--line);
+}
+
+.footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.footer-inner p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.to-top {
+  font-family: var(--font-title);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* The round button that appears once you scroll down */
+.top-btn {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 100;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--panel);
+  color: var(--text);
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.top-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* hidden is a normal HTML attribute. JavaScript switches it on and off. */
+.top-btn[hidden] {
+  display: none;
+}
+
+
+/* =========================================================
+   10. LIGHTBOX (the big photo viewer)
+   ========================================================= */
+
+.lightbox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  padding: 20px;
+  background: rgba(5, 6, 8, 0.94);
+}
+
+.lightbox[hidden] {
+  display: none;
+}
+
+.lightbox figure {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  max-width: 960px;
+  max-height: 100%;
+  margin: 0;
+}
+
+.lightbox img {
+  max-width: 100%;
+  max-height: 80vh;
+  border-radius: 12px;
+}
+
+.lightbox figcaption {
+  color: #d7d9dd;
+  font-size: 14px;
+  text-align: center;
+}
+
+.lb-close,
+.lb-arrow {
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  cursor: pointer;
+}
+
+.lb-close:hover,
+.lb-arrow:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.lb-close {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 42px;
+  height: 42px;
+  font-size: 24px;
+}
+
+.lb-arrow {
+  width: 46px;
+  height: 46px;
+  font-size: 26px;
+}
+
+
+/* =========================================================
+   FADE IN ON SCROLL
+   Anything with class="reveal" starts invisible and slightly
+   low. JavaScript adds "visible" when it scrolls into view.
+   ========================================================= */
+
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
+/* =========================================================
+   11. SCREEN SIZES
+   Each block applies only when the screen is narrower than
+   the width given, so they run from widest to narrowest.
+   ========================================================= */
+
+/* ----- Laptops and small desktops ----- */
+@media (max-width: 1100px) {
+  .skills-grid,
+  .work-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ----- Tablets ----- */
+@media (max-width: 960px) {
+  :root {
+    --gutter: 24px;
+  }
+
+  /* Put these side-by-side layouts into one column */
+  .hero-grid,
+  .about-grid,
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-photo {
+    max-width: 400px;
+    justify-self: start;
+    order: -1;          /* moves the photo above the text */
+  }
+
+  .hero-name {
+    font-size: 48px;
+  }
+
+  .section-title {
+    font-size: 34px;
+  }
+}
+
+/* ----- Where the hamburger menu takes over ----- */
+@media (max-width: 820px) {
+  .menu-btn {
+    display: block;
+  }
+
+  /* The menu slides in from the right. It sits off-screen
+     until JavaScript adds "open". */
+  .nav {
+    position: fixed;
+    top: 0;
+    right: 0;
+    z-index: 115;
+    width: 280px;
+    max-width: 82%;
+    height: 100%;
+    padding: 90px 22px 32px;
+    background: var(--panel);
+    border-left: 1px solid var(--line);
+    transform: translateX(100%);
+    visibility: hidden;
+    transition: transform 0.3s ease, visibility 0.3s ease;
+  }
+
+  .nav.open {
+    transform: translateX(0);
+    visibility: visible;
+  }
+
+  .nav-list {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .nav-link {
+    padding: 12px 14px;
+    font-size: 16px;
+  }
+
+  .nav-link.active {
+    background: var(--panel-2);
+    border-bottom: none;
+    border-left: 3px solid var(--accent);
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ----- Phones ----- */
+@media (max-width: 600px) {
+  :root {
+    --gutter: 16px;
+  }
+
+  .hero {
+    padding-top: 56px;
+  }
+
+  .hero-grid {
+    gap: 32px;
+    padding-bottom: 44px;
+  }
+
+  .hero-name {
+    font-size: 36px;
+  }
+
+  .hero-role {
+    min-height: 36px;
+    font-size: 18px;
+  }
+
+  .section {
+    padding: 64px 0;
+  }
+
+  .section-title {
+    font-size: 28px;
+  }
+
+  .section-head {
+    margin-bottom: 32px;
+  }
+
+  .stats {
+    gap: 24px;
+  }
+
+  .stat-number {
+    font-size: 28px;
+  }
+
+  .brand-text {
+    display: none;
+  }
+
+  .hero-photo {
+    max-width: 100%;
+  }
+
+  /* One card per row */
+  .skills-grid,
+  .work-grid {
+    grid-template-columns: 1fr;
+  }
+
+  /* Stack the label above the value */
+  .facts li,
+  .contact-list li {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .gallery-grid {
+    gap: 10px;
+  }
+
+  /* A phone has no hovering, so always show the caption */
+  .photo figcaption {
+    opacity: 1;
+    padding: 28px 10px 10px;
+    font-size: 12px;
+  }
+
+  .btn {
+    flex: 1;
+    text-align: center;
+  }
+
+  /* Move the arrows to the bottom so they do not cover the photo */
+  .lb-arrow {
+    position: absolute;
+    bottom: 22px;
+  }
+
+  .lb-prev { left: 24px; }
+  .lb-next { right: 24px; }
+}
+
+
+/* =========================================================
+   REDUCED MOTION
+   Some people set their computer to avoid animation.
+   This turns the movement off for them.
+   ========================================================= */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-track,
+  .caret {
+    animation: none;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+
+/* =========================================================
+   PRINTING
+   Hides the parts that make no sense on paper.
+   ========================================================= */
+@media print {
+  .site-header,
+  .marquee,
+  .filters,
+  .top-btn,
+  .lightbox,
+  .progress,
+  .hero-actions {
+    display: none;
+  }
+
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}

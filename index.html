@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Anointed Osara - Frontend Developer</title>
+  <meta name="description" content="Personal website of Anointed Ihinosen Osara, a frontend developer building responsive web apps with React and Next.js.">
+  <meta name="author" content="Anointed Ihinosen Osara">
+
+  <!-- Used when the page is shared on social media -->
+  <meta property="og:title" content="Anointed Osara - Frontend Developer">
+  <meta property="og:description" content="Frontend developer (React and Next.js), full-stack capable. 20+ projects shipped.">
+  <meta property="og:image" content="images/photo-profile.jpg">
+
+  <!-- The small icon on the browser tab -->
+  <link rel="icon" href="favicon.ico">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+
+  <!-- Fonts, then our own stylesheet -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- Lets keyboard users jump straight past the menu -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <!-- The thin orange bar at the top. JavaScript sets its width. -->
+  <div class="progress" id="progress"></div>
+
+
+  <!-- ============================================================
+       HEADER
+       ============================================================ -->
+  <header class="site-header" id="header">
+    <div class="wrap header-inner">
+
+      <a class="brand" href="#home">
+        <span class="brand-mark">AO</span>
+        <span class="brand-text">Anointed Osara</span>
+      </a>
+
+      <nav class="nav" id="nav">
+        <ul class="nav-list">
+          <li><a class="nav-link" href="#home">Home</a></li>
+          <li><a class="nav-link" href="#about">About</a></li>
+          <li><a class="nav-link" href="#skills">Skills</a></li>
+          <li><a class="nav-link" href="#experience">Experience</a></li>
+          <li><a class="nav-link" href="#work">Work</a></li>
+          <li><a class="nav-link" href="#gallery">Gallery</a></li>
+          <li><a class="nav-link" href="#contact">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="header-tools">
+        <!-- Switches between the dark and light colours -->
+        <button class="icon-btn" id="themeButton" type="button" aria-label="Switch to light theme">
+          <span id="themeIcon">&#9788;</span>
+        </button>
+
+        <!-- Opens the menu on phones and tablets -->
+        <button class="menu-btn" id="menuButton" type="button" aria-label="Menu" aria-expanded="false">
+          &#9776;
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- The dark sheet behind the open mobile menu -->
+  <div class="nav-scrim" id="navScrim"></div>
+
+
+  <main id="main">
+
+    <!-- ============================================================
+         HERO
+         ============================================================ -->
+    <section class="hero" id="home">
+      <div class="hero-glow"></div>
+
+      <div class="wrap hero-grid">
+
+        <div>
+          <p class="eyebrow">Hello, I'm</p>
+
+          <h1 class="hero-name">Anointed<br>Ihinosen Osara</h1>
+
+          <!-- JavaScript types the job titles into this span -->
+          <p class="hero-role">
+            <span id="typed"></span><span class="caret"></span>
+          </p>
+
+          <p class="hero-intro">
+            AI-first frontend developer with 3 years of experience, including 1 year
+            professional, building scalable, responsive web apps and full-stack
+            products in React and Next.js.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#work">View my work</a>
+            <a class="btn btn-ghost" href="anointed-osara-cv.pdf" download>Download CV</a>
+            <a class="btn btn-ghost" href="#contact">Get in touch</a>
+          </div>
+
+          <!-- JavaScript counts these up from 0. It reads the
+               target from data-count and the "+" from data-suffix. -->
+          <ul class="stats" id="stats">
+            <li>
+              <strong class="stat-number" data-count="20" data-suffix="+">0</strong>
+              <span>Projects shipped</span>
+            </li>
+            <li>
+              <strong class="stat-number" data-count="3">0</strong>
+              <span>Years building</span>
+            </li>
+            <li>
+              <strong class="stat-number" data-count="1">0</strong>
+              <span>Year professional</span>
+            </li>
+          </ul>
+        </div>
+
+        <figure class="hero-photo reveal">
+          <img src="images/photo-profile.jpg" width="810" height="1080"
+               alt="Anointed Osara standing outdoors in a tan suit and tie">
+          <figcaption>Benin City, Nigeria</figcaption>
+        </figure>
+
+      </div>
+
+      <!-- The scrolling strip of tool names. The list is written
+           twice so the animation can loop without a gap. -->
+      <div class="marquee">
+        <div class="marquee-track">
+          <span>React</span>
+          <span>Next.js</span>
+          <span>TypeScript</span>
+          <span>Tailwind CSS</span>
+          <span>Node.js</span>
+          <span>MongoDB</span>
+          <span>PostgreSQL</span>
+          <span>Accessibility</span>
+          <span>SSR</span>
+          <span>Performance</span>
+          <span>SEO</span>
+          <span>Design systems</span>
+
+          <span>React</span>
+          <span>Next.js</span>
+          <span>TypeScript</span>
+          <span>Tailwind CSS</span>
+          <span>Node.js</span>
+          <span>MongoDB</span>
+          <span>PostgreSQL</span>
+          <span>Accessibility</span>
+          <span>SSR</span>
+          <span>Performance</span>
+          <span>SEO</span>
+          <span>Design systems</span>
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         ABOUT
+         ============================================================ -->
+    <section class="section" id="about">
+      <div class="wrap">
+
+        <div class="section-head reveal">
+          <p class="section-tag">01 - About</p>
+          <h2 class="section-title">A developer who ships</h2>
+        </div>
+
+        <div class="about-grid">
+
+          <div class="about-text reveal">
+            <p>
+              I have shipped 20+ projects, from complete storefronts to dashboards
+              with typed APIs, authentication, MongoDB and PostgreSQL, turning Figma
+              designs into reusable components with a strong focus on performance,
+              SEO, accessibility, SSR and dynamic routing.
+            </p>
+            <p>
+              I use AI tools to ship faster, and I am looking for a fast-growing team
+              where I can own products end to end, from the first component to the
+              deployed, measured product.
+            </p>
+            <p>
+              Outside the editor I am a Geomatics graduate of the University of Benin,
+              currently serving my country through the NYSC scheme in Rivers State.
+            </p>
+          </div>
+
+          <ul class="facts reveal">
+            <li>
+              <span class="fact-key">Based in</span>
+              <span class="fact-value">Nigeria - available remote, worldwide</span>
+            </li>
+            <li>
+              <span class="fact-key">Focus</span>
+              <span class="fact-value">React and Next.js, full-stack capable</span>
+            </li>
+            <li>
+              <span class="fact-key">Education</span>
+              <span class="fact-value">B.Sc. Geomatics, University of Benin (2020-2025)</span>
+            </li>
+            <li>
+              <span class="fact-key">Languages</span>
+              <span class="fact-value">English - native / fluent</span>
+            </li>
+            <li>
+              <span class="fact-key">Open to</span>
+              <span class="fact-value">Frontend and full-stack roles, internships</span>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         SKILLS
+         ============================================================ -->
+    <section class="section section-alt" id="skills">
+      <div class="wrap">
+
+        <div class="section-head reveal">
+          <p class="section-tag">02 - Skills</p>
+          <h2 class="section-title">The stack I build with</h2>
+        </div>
+
+        <div class="skills-grid">
+
+          <div class="card skill-card reveal">
+            <h3>Frameworks</h3>
+            <ul class="tags">
+              <li>React.js</li>
+              <li>Next.js (App Router)</li>
+              <li>Server Components</li>
+            </ul>
+          </div>
+
+          <div class="card skill-card reveal">
+            <h3>Languages</h3>
+            <ul class="tags">
+              <li>TypeScript</li>
+              <li>JavaScript</li>
+              <li>HTML5</li>
+              <li>CSS3</li>
+            </ul>
+          </div>
+
+          <div class="card skill-card reveal">
+            <h3>Styling</h3>
+            <ul class="tags">
+              <li>Tailwind CSS</li>
+              <li>Styled Components</li>
+              <li>Mobile-first design</li>
+            </ul>
+          </div>
+
+          <div class="card skill-card reveal">
+            <h3>Backend and Data</h3>
+            <ul class="tags">
+              <li>Node.js / API Routes</li>
+              <li>RESTful APIs</li>
+              <li>Authentication</li>
+              <li>MongoDB</li>
+              <li>PostgreSQL</li>
+            </ul>
+          </div>
+
+          <div class="card skill-card reveal">
+            <h3>Deployment</h3>
+            <ul class="tags">
+              <li>Vercel</li>
+              <li>Git and GitHub</li>
+              <li>Environment config</li>
+            </ul>
+          </div>
+
+          <div class="card skill-card reveal">
+            <h3>AI Tools</h3>
+            <ul class="tags">
+              <li>Claude Code</li>
+              <li>Cursor</li>
+              <li>Codex</li>
+              <li>GitHub Copilot</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         EXPERIENCE
+         ============================================================ -->
+    <section class="section" id="experience">
+      <div class="wrap">
+
+        <div class="section-head reveal">
+          <p class="section-tag">03 - Experience</p>
+          <h2 class="section-title">Where I have worked and studied</h2>
+        </div>
+
+        <div class="timeline">
+
+          <div class="job reveal">
+            <div class="job-dot"></div>
+            <p class="job-date">07/2023 - 01/2024</p>
+            <h3 class="job-role">Frontend Developer</h3>
+            <p class="job-place">Cloudolle, United Kingdom (Remote)</p>
+            <ul class="job-points">
+              <li>
+                Developed and optimized the company's landing pages using Next.js and
+                Styled Components, ensuring modern, responsive and accessible user
+                interfaces.
+              </li>
+              <li>
+                Collaborated with designers to translate Figma wireframes into clean,
+                reusable React components with a consistent design system.
+              </li>
+              <li>
+                Improved page performance and SEO by implementing server-side
+                rendering and dynamic routing in Next.js.
+              </li>
+            </ul>
+          </div>
+
+          <div class="job reveal">
+            <div class="job-dot"></div>
+            <p class="job-date">08/2022 - 11/2022</p>
+            <h3 class="job-role">Frontend Developer Intern</h3>
+            <p class="job-place">Zuri Team, Lagos, Nigeria</p>
+            <ul class="job-points">
+              <li>
+                Completed Zuri's rigorous, fast-paced internship program through to
+                the final stage.
+              </li>
+              <li>Built multiple frontend projects and shipped responsive web applications.</li>
+              <li>
+                Collaborated with a team of skilled developers and designers to
+                deliver tasks on schedule.
+              </li>
+            </ul>
+          </div>
+
+          <div class="job reveal">
+            <div class="job-dot"></div>
+            <p class="job-date">2020 - 2025</p>
+            <h3 class="job-role">B.Sc. Geomatics</h3>
+            <p class="job-place">University of Benin, Benin City, Nigeria</p>
+            <ul class="job-points">
+              <li>
+                Faculty of Environmental Science - balanced the degree with
+                continuous, self-driven software development.
+              </li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         WORK
+         Each card carries data-tech. The filter buttons carry
+         data-filter. JavaScript compares the two.
+         ============================================================ -->
+    <section class="section section-alt" id="work">
+      <div class="wrap">
+
+        <div class="section-head reveal">
+          <p class="section-tag">04 - Work</p>
+          <h2 class="section-title">Selected projects</h2>
+          <p class="section-sub">
+            Seven live products. Every screenshot below is the real deployed site.
+          </p>
+        </div>
+
+        <div class="filters reveal">
+          <button class="chip on" type="button" data-filter="all">All</button>
+          <button class="chip" type="button" data-filter="nextjs">Next.js</button>
+          <button class="chip" type="button" data-filter="typescript">TypeScript</button>
+          <button class="chip" type="button" data-filter="mongodb">MongoDB</button>
+          <button class="chip" type="button" data-filter="tailwind">Tailwind CSS</button>
+        </div>
+
+        <p class="filter-note" id="filterNote"></p>
+
+        <div class="work-grid">
+
+          <div class="card work-card reveal" data-tech="nextjs typescript tailwind">
+            <a class="work-shot" href="https://shop-lyft.vercel.app/" target="_blank" rel="noopener">
+              <img src="images/project-shoplyft.jpg" width="1000" height="625" loading="lazy"
+                   alt="Screenshot of the ShopLyft storefront homepage">
+            </a>
+            <div class="work-body">
+              <p class="work-kind">E-Commerce Marketplace</p>
+              <h3 class="work-name">ShopLyft</h3>
+              <p class="work-sum">
+                An online marketplace with category browsing, flash sales, cart,
+                wishlist and user accounts - a fast, conversion-focused and fully
+                responsive storefront.
+              </p>
+              <ul class="tags small">
+                <li>Next.js</li>
+                <li>TypeScript</li>
+                <li>Prisma</li>
+                <li>Tailwind CSS</li>
+              </ul>
+              <p class="work-links">
+                <a href="https://shop-lyft.vercel.app/" target="_blank" rel="noopener">Live site</a>
+                <a class="code-link" href="https://github.com/anointedosara/ShopLyft" target="_blank" rel="noopener">Code</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="card work-card reveal" data-tech="nextjs typescript mongodb tailwind">
+            <a class="work-shot" href="https://commerce-psi-three-94.vercel.app/" target="_blank" rel="noopener">
+              <img src="images/project-commerce.jpg" width="1000" height="625" loading="lazy"
+                   alt="Screenshot of the Commerce full-stack store homepage">
+            </a>
+            <div class="work-body">
+              <p class="work-kind">Full-Stack Store</p>
+              <h3 class="work-name">Commerce</h3>
+              <p class="work-sum">
+                A full-stack e-commerce store - browse products, build a cart and
+                check out with signup and login, backed by a typed API and MongoDB.
+              </p>
+              <ul class="tags small">
+                <li>Next.js</li>
+                <li>TypeScript</li>
+                <li>MongoDB</li>
+                <li>Tailwind CSS</li>
+              </ul>
+              <p class="work-links">
+                <a href="https://commerce-psi-three-94.vercel.app/" target="_blank" rel="noopener">Live site</a>
+                <a class="code-link" href="https://github.com/anointedosara/commerce" target="_blank" rel="noopener">Code</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="card work-card reveal" data-tech="nextjs typescript mongodb tailwind">
+            <a class="work-shot" href="https://medium-dashboard.vercel.app/" target="_blank" rel="noopener">
+              <img src="images/project-medium.jpg" width="1000" height="625" loading="lazy"
+                   alt="Screenshot of the Medium analytics dashboard">
+            </a>
+            <div class="work-body">
+              <p class="work-kind">Analytics Dashboard</p>
+              <h3 class="work-name">Medium</h3>
+              <p class="work-sum">
+                A full-stack analytics dashboard with authentication and protected
+                routes - interactive charts, real-time stats, earnings and product
+                tables.
+              </p>
+              <ul class="tags small">
+                <li>Next.js</li>
+                <li>TypeScript</li>
+                <li>MongoDB</li>
+                <li>Tailwind CSS</li>
+              </ul>
+              <p class="work-links">
+                <a href="https://medium-dashboard.vercel.app/" target="_blank" rel="noopener">Live site</a>
+                <a class="code-link" href="https://github.com/anointedosara/medium-dashboard" target="_blank" rel="noopener">Code</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="card work-card reveal" data-tech="nextjs typescript mongodb tailwind">
+            <a class="work-shot" href="https://jiwa-space.vercel.app/" target="_blank" rel="noopener">
+              <img src="images/project-jiwa-space.jpg" width="1000" height="625" loading="lazy"
+                   alt="Screenshot of the Jiwa Space living-spaces platform">
+            </a>
+            <div class="work-body">
+              <p class="work-kind">Living Spaces Platform</p>
+              <h3 class="work-name">Jiwa Space</h3>
+              <p class="work-sum">
+                A full-stack living-space platform - browse and search curated spaces
+                through an elegant onboarding flow and a refined, dark, fully
+                responsive interface.
+              </p>
+              <ul class="tags small">
+                <li>Next.js</li>
+                <li>TypeScript</li>
+                <li>MongoDB</li>
+                <li>Tailwind CSS</li>
+              </ul>
+              <p class="work-links">
+                <a href="https://jiwa-space.vercel.app/" target="_blank" rel="noopener">Live site</a>
+                <a class="code-link" href="https://github.com/anointedosara/jiwa-space" target="_blank" rel="noopener">Code</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="card work-card reveal" data-tech="nextjs typescript tailwind">
+            <a class="work-shot" href="https://ai-blog-page.vercel.app/" target="_blank" rel="noopener">
+              <img src="images/project-futuretech.jpg" width="1000" height="625" loading="lazy"
+                   alt="Screenshot of the FutureTech AI news platform landing page">
+            </a>
+            <div class="work-body">
+              <p class="work-kind">AI News Platform</p>
+              <h3 class="work-name">FutureTech</h3>
+              <p class="work-sum">
+                A modern AI and tech news platform - featured articles, podcasts, a
+                resource library and a striking, fully responsive landing experience.
+              </p>
+              <ul class="tags small">
+                <li>Next.js</li>
+                <li>TypeScript</li>
+                <li>Tailwind CSS</li>
+              </ul>
+              <p class="work-links">
+                <a href="https://ai-blog-page.vercel.app/" target="_blank" rel="noopener">Live site</a>
+                <a class="code-link" href="https://github.com/anointedosara/ai-blog-page" target="_blank" rel="noopener">Code</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="card work-card reveal" data-tech="nextjs typescript tailwind">
+            <a class="work-shot" href="https://lankastay-alpha.vercel.app/" target="_blank" rel="noopener">
+              <img src="images/project-lankastay.jpg" width="1000" height="625" loading="lazy"
+                   alt="Screenshot of the LankaStay booking platform homepage">
+            </a>
+            <div class="work-body">
+              <p class="work-kind">Booking Platform</p>
+              <h3 class="work-name">LankaStay</h3>
+              <p class="work-sum">
+                A hotel and stay booking platform - search availability by location,
+                guests and dates through a clean, conversion-focused UI.
+              </p>
+              <ul class="tags small">
+                <li>Next.js</li>
+                <li>TypeScript</li>
+                <li>Tailwind CSS</li>
+              </ul>
+              <p class="work-links">
+                <a href="https://lankastay-alpha.vercel.app/" target="_blank" rel="noopener">Live site</a>
+                <a class="code-link" href="https://github.com/anointedosara/Lankastay" target="_blank" rel="noopener">Code</a>
+              </p>
+            </div>
+          </div>
+
+          <div class="card work-card reveal" data-tech="nextjs tailwind">
+            <a class="work-shot" href="https://rest-countries-api-with-color-theme-inky.vercel.app/" target="_blank" rel="noopener">
+              <img src="images/project-rest-countries.jpg" width="1000" height="625" loading="lazy"
+                   alt="Screenshot of the REST Countries Explorer">
+            </a>
+            <div class="work-body">
+              <p class="work-kind">Interactive Country Explorer</p>
+              <h3 class="work-name">REST Countries Explorer</h3>
+              <p class="work-sum">
+                Searchable country data with region filtering, detail views and a
+                light and dark theme switch carried across the whole app.
+              </p>
+              <ul class="tags small">
+                <li>Next.js</li>
+                <li>REST API</li>
+                <li>Tailwind CSS</li>
+              </ul>
+              <p class="work-links">
+                <a href="https://rest-countries-api-with-color-theme-inky.vercel.app/" target="_blank" rel="noopener">Live site</a>
+                <a class="code-link" href="https://github.com/anointedosara/REST-Countries-API-with-color-theme-switcher" target="_blank" rel="noopener">Code</a>
+              </p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         GALLERY
+         Clicking a photo opens the big viewer at the bottom of
+         this file. JavaScript reads the image and the caption.
+         ============================================================ -->
+    <section class="section" id="gallery">
+      <div class="wrap">
+
+        <div class="section-head reveal">
+          <p class="section-tag">05 - Gallery</p>
+          <h2 class="section-title">Life outside the editor</h2>
+          <p class="section-sub">
+            Click any photo to open it full size. Arrow keys move between them.
+          </p>
+        </div>
+
+        <div class="gallery-grid">
+
+          <figure class="photo reveal" tabindex="0" role="button">
+            <img src="images/photo-friends-selfie.jpg" width="810" height="1080" loading="lazy"
+                 alt="Anointed Osara taking a selfie with three friends after his final-year project defence">
+            <figcaption>Project defence, with the boys</figcaption>
+          </figure>
+
+          <figure class="photo reveal" tabindex="0" role="button">
+            <img src="images/photo-signout.jpg" width="1050" height="1400" loading="lazy"
+                 alt="Anointed Osara with three coursemates in shirts covered in signatures on signing-out day">
+            <figcaption>Geomatics, Class of 2025 - signing out</figcaption>
+          </figure>
+
+          <figure class="photo reveal" tabindex="0" role="button">
+            <img src="images/photo-camp-khaki.jpg" width="934" height="1400" loading="lazy"
+                 alt="Anointed Osara in full NYSC khaki at the swearing-in ceremony, in front of the orientation camp banner">
+            <figcaption>Swearing-in ceremony - NYSC Orientation Camp, Nonwa Gbam, Tai LGA, Rivers State</figcaption>
+          </figure>
+
+          <figure class="photo reveal" tabindex="0" role="button">
+            <img src="images/photo-camp-salute.jpg" width="934" height="1400" loading="lazy"
+                 alt="Anointed Osara saluting in his NYSC t-shirt and khaki trousers on swearing-in day">
+            <figcaption>Swearing-in day - the salute</figcaption>
+          </figure>
+
+          <figure class="photo reveal" tabindex="0" role="button">
+            <img src="images/photo-camp-portrait.jpg" width="934" height="1400" loading="lazy"
+                 alt="Close-up portrait of Anointed Osara in an NYSC t-shirt and cap on swearing-in day">
+            <figcaption>Swearing-in day - platoon 9</figcaption>
+          </figure>
+
+          <figure class="photo reveal" tabindex="0" role="button">
+            <img src="images/photo-camp-wall.jpg" width="933" height="1400" loading="lazy"
+                 alt="Anointed Osara sitting on a wall with fellow corps members during Man o' War drills, holding his NYSC cap">
+            <figcaption>Man o' War drills in camp</figcaption>
+          </figure>
+
+          <figure class="photo reveal" tabindex="0" role="button">
+            <img src="images/photo-culture-solo.jpg" width="1050" height="1400" loading="lazy"
+                 alt="Anointed Osara in white traditional dress and a red cap at the cultural carnival">
+            <figcaption>Cultural carnival at camp</figcaption>
+          </figure>
+
+          <figure class="photo reveal" tabindex="0" role="button">
+            <img src="images/photo-culture-friends.jpg" width="1050" height="1400" loading="lazy"
+                 alt="Anointed Osara with two friends in traditional dress at the cultural carnival">
+            <figcaption>Cultural carnival, with camp friends</figcaption>
+          </figure>
+
+        </div>
+      </div>
+    </section>
+
+
+    <!-- ============================================================
+         CONTACT
+         ============================================================ -->
+    <section class="section section-alt" id="contact">
+      <div class="wrap">
+
+        <div class="section-head reveal">
+          <p class="section-tag">06 - Contact</p>
+          <h2 class="section-title">Let's build something</h2>
+          <p class="section-sub">
+            I reply to every genuine message, usually within a day.
+          </p>
+        </div>
+
+        <div class="contact-grid">
+
+          <ul class="contact-list reveal">
+            <li>
+              <span class="contact-key">Email</span>
+              <a class="contact-value" href="mailto:anointedosara@gmail.com">anointedosara@gmail.com</a>
+            </li>
+            <li>
+              <span class="contact-key">Phone</span>
+              <a class="contact-value" href="tel:+2349124057670">+234 912 405 7670</a>
+            </li>
+            <li>
+              <span class="contact-key">Location</span>
+              <span class="contact-value">Nigeria - available remote, worldwide</span>
+            </li>
+            <li>
+              <span class="contact-key">Elsewhere</span>
+              <span class="contact-value socials">
+                <a href="https://github.com/anointedosara" target="_blank" rel="noopener">GitHub</a>
+                <a href="https://www.linkedin.com/in/anointed-osara" target="_blank" rel="noopener">LinkedIn</a>
+                <a href="https://anointedosara.vercel.app/" target="_blank" rel="noopener">Portfolio</a>
+                <a href="https://x.com/lil_ted_03" target="_blank" rel="noopener">X</a>
+              </span>
+            </li>
+          </ul>
+
+          <!-- novalidate turns off the browser's own warnings, so our
+               own messages in main.js are the ones you see -->
+          <form class="card form reveal" id="contactForm" novalidate>
+
+            <div class="field">
+              <label for="name">Your name</label>
+              <input type="text" id="name" name="name" placeholder="Ada Lovelace">
+              <p class="error-text"></p>
+            </div>
+
+            <div class="field">
+              <label for="email">Your email</label>
+              <input type="email" id="email" name="email" placeholder="ada@example.com">
+              <p class="error-text"></p>
+            </div>
+
+            <div class="field">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5"
+                        placeholder="Tell me about the role or the project..."></textarea>
+              <p class="error-text"></p>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Send message</button>
+            <p class="form-status" id="formStatus"></p>
+
+          </form>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+
+  <!-- ============================================================
+       FOOTER
+       ============================================================ -->
+  <footer class="site-footer">
+    <div class="wrap footer-inner">
+      <p>
+        &copy; <span id="year">2026</span> Anointed Ihinosen Osara.
+        Hand-coded in HTML, CSS and JavaScript.
+      </p>
+      <a class="to-top" href="#home">Back to top</a>
+    </div>
+  </footer>
+
+
+  <!-- ============================================================
+       PHOTO VIEWER
+       Starts hidden. JavaScript fills in the image and caption
+       when a gallery photo is clicked.
+       ============================================================ -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-label="Photo viewer" hidden>
+
+    <button class="lb-close" id="lightboxClose" type="button" aria-label="Close">&times;</button>
+
+    <button class="lb-arrow lb-prev" id="lightboxPrev" type="button" aria-label="Previous photo">&#8249;</button>
+
+    <figure>
+      <img id="lightboxImage" src="" alt="">
+      <figcaption id="lightboxCaption"></figcaption>
+    </figure>
+
+    <button class="lb-arrow lb-next" id="lightboxNext" type="button" aria-label="Next photo">&#8250;</button>
+
+  </div>
+
+
+  <!-- Appears once you scroll down -->
+  <button class="top-btn" id="topButton" type="button" aria-label="Back to top" hidden>&uarr;</button>
+
+
+  <script src="js/main.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Favicon: an exact crop of the AIO monogram (components/Logo.tsx) down to
+       its first two glyphs. All three initials turn to mush at 16px, so the
+       tab mark keeps the A and the accent bar and drops the O. Bone ground
+       rather than ink, because a dark tab strip swallows a dark icon. -->
+  <rect width="64" height="64" rx="15" fill="#F2EEE7"/>
+  <g transform="translate(11, 9.19) scale(1.141)">
+    <path d="M10.5 4 H15.5 L26 36 H21 L13 11.62 L5 36 H0 Z" fill="#09080B"/>
+    <path d="M3.87 24.2 H22.13 L23.64 28.8 H2.36 Z" fill="#09080B"/>
+    <rect x="32.6" y="4" width="4.2" height="32" fill="#FF4D2E"/>
+  </g>
+</svg>
